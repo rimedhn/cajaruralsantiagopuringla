@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thermal POS Receipt</title>
+    <title>Recibo de caja</title>
+    <link rel="icon" href="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop%20Santiago%20Puringla%20Logo.jpeg?raw=true" type="image/x-icon">
     <style>
       #thermal-pos {
         box-shadow: 0 0 0mm #eee;
@@ -133,7 +134,7 @@
       <div class="label">
         <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop%20Santiago%20Puringla%20Logo.jpeg?raw=true" alt="Mi imagen" class="mi-imagen" /><br />
         <span id="empresa"></span></b><br />
-        <span>ARQUEO DE CAJA</span></b><br />               
+        <span>RECIBO DE CAJA</span></b><br />               
       </div>
 
       <div align="center">--------------------------------------------------------</div>
@@ -154,13 +155,13 @@
           <td class="informasi" style="width: 70%;" id="cajero"></td>
         </tr>
         <tr>
-          <td class="informasi" style="width: 30%;">TIPO:</td>
-          <td class="informasi" style="width: 70%;" id="tipoarqueo"></td>
+          <td class="informasi" style="width: 30%;">TRANSACCIÒN:</td>
+          <td class="informasi" style="width: 70%;" id="tipo"></td>
         </tr>
       </table>
 
       <div align="center">--------------------------------------------------------</div>
-      <div align="center">DETALLE DE PAGOS</div>
+      <div align="center">DETALLE</div>
       <div align="center">--------------------------------------------------------</div>
 
       <table>
@@ -182,7 +183,7 @@
       <div align="center">--------------------------------------------------------</div>
       <table>        
         <tr>
-          <td class="detail">TOTAL ARQUEO</td>
+          <td class="detail">TOTAL</td>
           <td class="detail1">L<span id="totalarqueo"></span></td>
         </tr>
       </table>
@@ -215,7 +216,7 @@
       setTextContent("fecha", getUrlParameter("fecha"));
       setTextContent("caja", getUrlParameter("caja"));
       setTextContent("cajero", getUrlParameter("cajero"));
-      setTextContent("tipoarqueo", getUrlParameter("tipoarqueo"));
+      setTextContent("tipo", getUrlParameter("tipoarqueo"));
       setTextContent("folio", getUrlParameter("folio"));
       setTextContent("totalarqueo", getUrlParameter("totalarqueo"));
       // Populate product table
