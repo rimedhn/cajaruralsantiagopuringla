@@ -155,7 +155,7 @@
           <td class="informasi" style="width: 70%;" id="cajero"></td>
         </tr>
         <tr>
-          <td class="informasi" style="width: 30%;">TRANSACCIÒN:</td>
+          <td class="informasi" style="width: 30%;">TIPO:</td>
           <td class="informasi" style="width: 70%;" id="tipo"></td>
         </tr>
       </table>
@@ -164,27 +164,10 @@
       <div align="center">DETALLE</div>
       <div align="center">--------------------------------------------------------</div>
 
-      <table>
-        <tr class="listitem">
-          <td>
-            <h2>MEDIO DE PAGO</h2>
-          </td>
-          <td>
-            <h2>MONTO</h2>
-          </td>         
-        </tr>
-      </table>
-      <div align="center">--------------------------------------------------------</div>
-
-      <table id="productTable">
-        <!-- Product rows will be inserted here -->
-      </table>
-
-      <div align="center">--------------------------------------------------------</div>
       <table>        
         <tr>
-          <td class="detail">TOTAL</td>
-          <td class="detail1">L<span id="totalarqueo"></span></td>
+          <td class="detail"><span id="transaccion"></span></td>
+          <td class="detail1">L<span id="total"></span></td>
         </tr>
       </table>
 
@@ -218,30 +201,10 @@
       setTextContent("cajero", getUrlParameter("cajero"));
       setTextContent("tipo", getUrlParameter("tipoarqueo"));
       setTextContent("folio", getUrlParameter("folio"));
-      setTextContent("totalarqueo", getUrlParameter("totalarqueo"));
+      setTextContent("total", getUrlParameter("totalarqueo"));
+      setTextContent("transaccion", getUrlParameter("transaccion"));
       // Populate product table
-      var descriptions = getUrlParameter("descriptions").split(",");
-      var quantitys = getUrlParameter("quantitys").split(",");
-      var amounts = getUrlParameter("amounts").split(",");
 
-      var productTable = document.getElementById("productTable");
-      for (var i = 0; i < descriptions.length; i++) {
-        // Create a new row for the description
-        var descriptionRow = productTable.insertRow();
-        descriptionRow.innerHTML = `
-        <td colspan="3" class="descriptions">${descriptions[i]}</td>
-    `;
-
-        // Create a new row for the other details
-        var detailsRow = productTable.insertRow();
-        detailsRow.innerHTML = `
-        <td class="qty"  style="width: 80px;">${quantitys[i]}</td>
-        <td class="Amount" style="width: 20px;">${amounts[i]}</td>
-    `;
-
-        // Add a class to the details row for styling
-        detailsRow.className = "listitem";
-      }      
 
       // Trigger print when the page loads
       window.onload = function () {
