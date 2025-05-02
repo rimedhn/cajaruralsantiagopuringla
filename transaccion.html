@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir Transacción en Libreta (Sin Botón)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        #preview-container {
+            margin-top: 20px;
+            border: 1px dashed #ccc;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: left;
+            white-space: pre-wrap; /* Preserve line breaks */
+            font-family: monospace; /* Fixed-width font for alignment */
+            font-size: 12px; /* Simulate printer font */
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body onload="obtenerDatosImprimir()">
+    <div class="container">
+        <h1>Imprimir Transacción en Libreta (Automático)</h1>
+        <label for="data-url">URL con Datos (Formato: No=valor&Fecha=valor&...&linea=numero):</label>
+        <input type="text" id="data-url" placeholder="Ingresa la URL con los datos y la línea de impresión">
+        <div id="error-message" class="error-message hidden"></div>
+        <div id="preview-container" class="hidden">
+            <h2>Vista Previa de Impresión</h2>
+            <pre id="print-preview"></pre>
+            <p>Nota: Esta es una simulación de la impresión.</p>
+        </div>
+    </div>
+
+    <script>
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Error al cargar los datos: ${response.status}`);
+                }
+                const textData = await response.text();
+                return textData;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.getElementById('error-message').textContent = error.message;
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('preview-container').classList.add('hidden');
+                return null;
+            }
+        }
+
+        function parseTransactionData(dataString) {
+            const params = new URLSearchParams(dataString);
+            return {
+                No: params.get('No') || '',
+                Fecha: params.get('Fecha') || '',
+                Deposito: params.get('Deposito') || '',
+                Retiro: params.get('Retiro') || '',
+                Interes: params.get('Interes') || '',
+                Saldo: params.get('Saldo') || '',
+                linea: params.get('linea') || ''
+            };
+        }
+
+        function formatTransaction(transaction) {
+            const formatDate = (dateString) => {
+                try {
+                    const dateParts = dateString.split('-');
+                    if (dateParts.length === 3) {
+                        return `${dateParts[2].padStart(2, '0')}/${dateParts[1].padStart(2, '0')}/${dateParts[0].slice(-2)}`;
+                    }
+                    return '  --/--/--';
+                } catch (error) {
+                    return '  --/--/--';
+                }
+            };
+
+            const no = (transaction.No || '').padEnd(4, ' ');
+            const fecha = formatDate(transaction.Fecha).padEnd(8, ' ');
+            const deposito = (transaction.Deposito ? `+${parseFloat(transaction.Deposito).toFixed(2)}` : '').padStart(10, ' ');
+            const retiro = (transaction.Retiro ? `-${parseFloat(transaction.Retiro).toFixed(2)}` : '').padStart(10, ' ');
+            const interes = (transaction.Interes ? `+${parseFloat(transaction.Interes).toFixed(2)}` : '').padStart(8, ' ');
+            const saldo = (transaction.Saldo ? parseFloat(transaction.Saldo).toFixed(2) : '').padStart(12, ' ');
+
+            return `${no}${fecha}${deposito}${retiro}${interes}${saldo}`;
+        }
+
+        function obtenerDatosImprimir() {
+            const dataURLInput = document.getElementById('data-url');
+            const dataURL = dataURLInput.value;
+
+            if (!dataURL.trim()) {
+                document.getElementById('error-message').textContent = 'Por favor, ingresa la URL con los datos y la línea.';
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('preview-container').classList.add('hidden');
+                return;
+            }
+
+            fetchData(dataURL).then(textData => {
+                if (textData !== null) {
+                    const transaction = parseTransactionData(textData);
+                    const lineNumber = parseInt(transaction.linea);
+
+                    if (isNaN(lineNumber) || lineNumber < 1 || lineNumber > 43) {
+                        document.getElementById('error-message').textContent = 'Número de línea inválido en la URL (debe ser 1-43).';
+                        document.getElementById('error-message').classList.remove('hidden');
+                        document.getElementById('preview-container').classList.add('hidden');
+                        return;
+                    }
+
+                    const formattedLine = formatTransaction(transaction);
+                    const emptyLine = ' '.repeat(48); // Adjust based on formatTransaction output length
+                    let printAreaContent = '';
+
+                    for (let i = 1; i <= 43; i++) {
+                        if (i === lineNumber) {
+                            printAreaContent += formattedLine + '\n';
+                        } else {
+                            printAreaContent += emptyLine + '\n';
+                        }
+                    }
+
+                    document.getElementById('print-preview').textContent = printAreaContent;
+                    document.getElementById('preview-container').classList.remove('hidden');
+                    document.getElementById('error-message').classList.add('hidden');
+
+                    // Simulate printing (in a real scenario, you'd use a printing library/API)
+                    console.log("Simulando impresión en línea:", lineNumber);
+                    console.log(printAreaContent);
+                    alert("Simulación de impresión completada automáticamente. Revise la consola para la salida simulada.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
