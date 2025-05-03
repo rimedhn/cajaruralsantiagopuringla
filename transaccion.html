@@ -74,17 +74,17 @@
         }
 
         function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
-            const formatDate = (dateString) => {
-                try {
-                    const dateParts = dateString.split('-');
-                    if (dateParts.length === 3) {
-                        return `${dateParts[2].padStart(2, '0')}/${dateParts[1].padStart(2, '0')}/${dateParts[0].slice(-2)}`;
-                    }
-                    return '  --/--/--';
-                } catch (error) {
-                    return '  --/--/--';
-                }
-            };
+            //const formatDate = (dateString) => {
+            //    try {
+            //        const dateParts = dateString.split('-');
+            //        if (dateParts.length === 3) {
+            //            return `${dateParts[2].padStart(2, '0')}/${dateParts[1].padStart(2, '0')}/${dateParts[0].slice(-2)}`;
+            //        }
+            //        return '  --/--/--';
+            //    } catch (error) {
+            //        return '  --/--/--';
+            //    }
+            //};
 
             const formattedNo = no.padEnd(4, ' ');
             const formattedFecha = formatDate(fecha).padEnd(8, ' ');
