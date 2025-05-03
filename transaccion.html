@@ -1,111 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imprimir Transacción en Libreta (Sin Botón)</title>
+    <title>Imprimir Transacción Libreta</title>
     <style>
         body {
-            font-family: sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+            font-family: monospace; /* Fuente de ancho fijo para simular impresora */
+            font-size: 10px; /* Tamaño de fuente pequeño */
+            line-height: 1; /* Interlineado simple */
+            margin: 0; /* Sin márgenes */
+            padding-top: 4.5cm; /* Espacio superior hasta el área de impresión */
         }
 
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
+        .print-area {
+            width: 11.5cm; /* Ancho del área de impresión */
+            height: 23cm; /* Largo del área de impresión */
+            margin-left: auto;
+            margin-right: auto;
+            position: relative; /* Para posicionar las líneas */
         }
 
-        h1 {
-            color: #333;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        input[type="text"] {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        #error-message {
-            color: red;
-            margin-top: 10px;
-        }
-
-        #preview-container {
-            margin-top: 20px;
-            border: 1px dashed #ccc;
-            padding: 20px;
-            border-radius: 4px;
-            text-align: left;
-            white-space: pre-wrap; /* Preserve line breaks */
-            font-family: monospace; /* Fixed-width font for alignment */
-            font-size: 12px; /* Simulate printer font */
-        }
-
-        .hidden {
-            display: none;
+        .print-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            white-space: nowrap; /* Evitar saltos de línea */
+            overflow: hidden; /* Ocultar texto que exceda el ancho */
         }
     </style>
 </head>
-<body onload="obtenerDatosImprimir()">
-    <div class="container">
-        <h1>Imprimir Transacción en Libreta (Automático)</h1>
-        <label for="data-url">URL con Datos (Formato: No=valor&Fecha=valor&...&linea=numero):</label>
-        <input type="text" id="data-url" placeholder="Ingresa la URL con los datos y la línea de impresión">
-        <div id="error-message" class="error-message hidden"></div>
-        <div id="preview-container" class="hidden">
-            <h2>Vista Previa de Impresión</h2>
-            <pre id="print-preview"></pre>
-            <p>Nota: Esta es una simulación de la impresión.</p>
+<body onload="imprimirEnLibreta()">
+    <div class="print-area" id="printArea">
         </div>
-    </div>
 
     <script>
-        async function fetchData(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Error al cargar los datos: ${response.status}`);
+        function getQueryParam(param) {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function imprimirEnLibreta() {
+            const no = getQueryParam("No") || "";
+            const fecha = getQueryParam("Fecha") || "";
+            const deposito = getQueryParam("Deposito") || "";
+            const retiro = getQueryParam("Retiro") || "";
+            const interes = getQueryParam("Interes") || "";
+            const saldo = getQueryParam("Saldo") || "";
+            const lineaImpresion = parseInt(getQueryParam("linea")) || 1; // Default a línea 1 si no se especifica o es inválido
+
+            const printArea = document.getElementById("printArea");
+            const lineHeightCm = 23 / 43; // Altura de cada línea en cm
+            const lineHeightPx = lineHeightCm * 37.795; // Convert cm a px (aprox. 96 DPI)
+
+            // Crear elementos para simular las 43 líneas
+            for (let i = 1; i <= 43; i++) {
+                const lineDiv = document.createElement("div");
+                lineDiv.classList.add("print-line");
+                lineDiv.style.top = `${(i - 1) * lineHeightPx}px`;
+
+                if (i === lineaImpresion) {
+                    // Formatear la línea de la transacción
+                    const formattedLine = formatTransaction(no, fecha, deposito, retiro, interes, saldo);
+                    lineDiv.textContent = formattedLine;
+                } else {
+                    lineDiv.textContent = " ".repeat(50); // Espacios para líneas vacías
                 }
-                const textData = await response.text();
-                return textData;
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                document.getElementById('error-message').textContent = error.message;
-                document.getElementById('error-message').classList.remove('hidden');
-                document.getElementById('preview-container').classList.add('hidden');
-                return null;
+                printArea.appendChild(lineDiv);
             }
+
+            // Simular la impresión (en un entorno real, esto activaría la impresión)
+            window.print();
         }
 
-        function parseTransactionData(dataString) {
-            const params = new URLSearchParams(dataString);
-            return {
-                No: params.get('No') || '',
-                Fecha: params.get('Fecha') || '',
-                Deposito: params.get('Deposito') || '',
-                Retiro: params.get('Retiro') || '',
-                Interes: params.get('Interes') || '',
-                Saldo: params.get('Saldo') || '',
-                linea: params.get('linea') || ''
-            };
-        }
-
-        function formatTransaction(transaction) {
+        function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
             const formatDate = (dateString) => {
                 try {
                     const dateParts = dateString.split('-');
@@ -118,61 +86,14 @@
                 }
             };
 
-            const no = (transaction.No || '').padEnd(4, ' ');
-            const fecha = formatDate(transaction.Fecha).padEnd(8, ' ');
-            const deposito = (transaction.Deposito ? `+${parseFloat(transaction.Deposito).toFixed(2)}` : '').padStart(10, ' ');
-            const retiro = (transaction.Retiro ? `-${parseFloat(transaction.Retiro).toFixed(2)}` : '').padStart(10, ' ');
-            const interes = (transaction.Interes ? `+${parseFloat(transaction.Interes).toFixed(2)}` : '').padStart(8, ' ');
-            const saldo = (transaction.Saldo ? parseFloat(transaction.Saldo).toFixed(2) : '').padStart(12, ' ');
+            const formattedNo = no.padEnd(4, ' ');
+            const formattedFecha = formatDate(fecha).padEnd(8, ' ');
+            const formattedDeposito = deposito ? `+${parseFloat(deposito).toFixed(2)}`.padStart(10, ' ') : "".padStart(10, ' ');
+            const formattedRetiro = retiro ? `-${parseFloat(retiro).toFixed(2)}`.padStart(10, ' ') : "".padStart(10, ' ');
+            const formattedInteres = interes ? `+${parseFloat(interes).toFixed(2)}`.padStart(8, ' ') : "".padStart(8, ' ');
+            const formattedSaldo = saldo ? parseFloat(saldo).toFixed(2).padStart(12, ' ') : "".padStart(12, ' ');
 
-            return `${no}${fecha}${deposito}${retiro}${interes}${saldo}`;
-        }
-
-        function obtenerDatosImprimir() {
-            const dataURLInput = document.getElementById('data-url');
-            const dataURL = dataURLInput.value;
-
-            if (!dataURL.trim()) {
-                document.getElementById('error-message').textContent = 'Por favor, ingresa la URL con los datos y la línea.';
-                document.getElementById('error-message').classList.remove('hidden');
-                document.getElementById('preview-container').classList.add('hidden');
-                return;
-            }
-
-            fetchData(dataURL).then(textData => {
-                if (textData !== null) {
-                    const transaction = parseTransactionData(textData);
-                    const lineNumber = parseInt(transaction.linea);
-
-                    if (isNaN(lineNumber) || lineNumber < 1 || lineNumber > 43) {
-                        document.getElementById('error-message').textContent = 'Número de línea inválido en la URL (debe ser 1-43).';
-                        document.getElementById('error-message').classList.remove('hidden');
-                        document.getElementById('preview-container').classList.add('hidden');
-                        return;
-                    }
-
-                    const formattedLine = formatTransaction(transaction);
-                    const emptyLine = ' '.repeat(48); // Adjust based on formatTransaction output length
-                    let printAreaContent = '';
-
-                    for (let i = 1; i <= 43; i++) {
-                        if (i === lineNumber) {
-                            printAreaContent += formattedLine + '\n';
-                        } else {
-                            printAreaContent += emptyLine + '\n';
-                        }
-                    }
-
-                    document.getElementById('print-preview').textContent = printAreaContent;
-                    document.getElementById('preview-container').classList.remove('hidden');
-                    document.getElementById('error-message').classList.add('hidden');
-
-                    // Simulate printing (in a real scenario, you'd use a printing library/API)
-                    console.log("Simulando impresión en línea:", lineNumber);
-                    console.log(printAreaContent);
-                    alert("Simulación de impresión completada automáticamente. Revise la consola para la salida simulada.");
-                }
-            });
+            return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
         }
     </script>
 </body>
