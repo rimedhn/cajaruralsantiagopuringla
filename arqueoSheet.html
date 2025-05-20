@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arqueo de Caja</title>
+    <link rel="icon" href="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop%20Santiago%20Puringla%20Logo.jpeg?raw=true" type="image/x-icon">
+    <style>
+        #carta-arqueo {
+            font-family: Arial, sans-serif;
+            width: 210mm; /* Ancho de la hoja carta */
+            margin: 10mm auto; /* Margen para centrar e impresión */
+            box-shadow: 0 0 5mm rgba(0, 0, 0, 0.1); /* Sutil sombra para destacar */
+            padding: 15mm;
+        }
+
+        #carta-arqueo h2 {
+            font-size: 18px;
+            line-height: 1.2;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        #carta-arqueo .label {
+            text-align: center;
+            font-size: 20px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        #carta-arqueo .informasi {
+            vertical-align: top;
+            text-align: left;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        #carta-arqueo .listitem {
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        #carta-arqueo table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        #carta-arqueo th, #carta-arqueo td {
+            padding: 5px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #carta-arqueo th {
+            font-weight: bold;
+        }
+
+        #carta-arqueo .descriptions {
+            width: 100%;
+            text-align: left;
+            font-weight: bold;
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+        #carta-arqueo .qty {
+            width: 20%;
+            text-align: left;
+        }
+
+        #carta-arqueo .Amount {
+            width: 80%;
+            text-align: right;
+        }
+
+        #carta-arqueo .detail {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        #carta-arqueo .detail1 {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        #carta-arqueo .bawah {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        #carta-arqueo .mi-imagen {
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+
+        #carta-arqueo .separador {
+            border-top: 1px dashed #bbb;
+            margin: 10px 0;
+        }
+
+        /* Alineación específica para la tabla de productos */
+        #carta-arqueo #productTable .listitem td:first-child {
+            width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #carta-arqueo #productTable .listitem td:last-child {
+            width: 20%;
+            text-align: right;
+        }
+    </style>
+</head>
+<body id="all">
+    <div id="carta-arqueo">
+        <div class="label">
+            <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Mi imagen" class="mi-imagen" /><br />
+            <span id="empresa"></span><br /><br />
+            <span>ARQUEO DE CAJA</span><br />
+        </div>
+
+        <div class="separador"></div>
+        <div style="text-align: center;"><b>DATOS GENERALES</b></div>
+        <div class="separador"></div>
+
+        <table>
+            <tr>
+                <td class="informasi" style="width: 30%;">FECHA:</td>
+                <td class="informasi" style="width: 70%;" id="fecha"></td>
+            </tr>
+            <tr>
+                <td class="informasi" style="width: 30%;">CAJA:</td>
+                <td class="informasi" style="width: 70%;" id="caja"></td>
+            </tr>
+            <tr>
+                <td class="informasi" style="width: 30%;">CAJERO:</td>
+                <td class="informasi" style="width: 70%;" id="cajero"></td>
+            </tr>
+            <tr>
+                <td class="informasi" style="width: 30%;">TIPO:</td>
+                <td class="informasi" style="width: 70%;" id="tipoarqueo"></td>
+            </tr>
+        </table>
+
+        <div class="separador"></div>
+        <div style="text-align: center;">DETALLE DE PAGOS</div>
+        <div class="separador"></div>
+
+        <table>
+            <thead>
+                <tr class="listitem">
+                    <th>MEDIO DE PAGO</th>
+                    <th style="text-align: right;">MONTO</th>
+                </tr>
+            </thead>
+            <tbody id="productTable">
+                </tbody>
+        </table>
+
+        <div class="separador"></div>
+        <table>
+            <tr>
+                <td class="detail">TOTAL ARQUEO</td>
+                <td class="detail1">L<span id="totalarqueo"></span></td>
+            </tr>
+        </table>
+
+        <div class="separador"></div>
+        <div style="text-align: center;">REFERENCIA: <span id="folio"></span></div>
+        <div class="separador"></div>
+        <div class="bawah">Gracias por su preferencia!!</div>
+        <div class="separador"></div>
+    </div>
+
+    <script>
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+            var results = regex.exec(location.search);
+            return results === null
+                ? ""
+                : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        // Function to set text content of an element
+        function setTextContent(id, value) {
+            document.getElementById(id).textContent = value;
+        }
+
+        // Populate the receipt with data from URL parameters
+        setTextContent("empresa", getUrlParameter("empresa"));
+        setTextContent("fecha", getUrlParameter("fecha"));
+        setTextContent("caja", getUrlParameter("caja"));
+        setTextContent("cajero", getUrlParameter("cajero"));
+        setTextContent("tipoarqueo", getUrlParameter("tipoarqueo"));
+        setTextContent("folio", getUrlParameter("folio"));
+        setTextContent("totalarqueo", getUrlParameter("totalarqueo"));
+
+        // Populate product table
+        var descriptions = getUrlParameter("descriptions").split(",");
+        var quantitys = getUrlParameter("quantitys").split(",");
+        var amounts = getUrlParameter("amounts").split(",");
+
+        var productTable = document.getElementById("productTable");
+        for (var i = 0; i < descriptions.length; i++) {
+            // Create a new row for the details
+            var detailsRow = productTable.insertRow();
+            detailsRow.className = "listitem";
+            detailsRow.innerHTML = `
+                <td>${descriptions[i]}</td>
+                <td style="text-align: right;">${amounts[i]}</td>
+            `;
+        }
+
+        // Trigger print when the page loads
+        window.onload = function () {
+            window.print();
+        };
+    </script>
+</body>
+</html>
