@@ -6,119 +6,129 @@
     <title>Arqueo de Caja</title>
     <link rel="icon" href="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop%20Santiago%20Puringla%20Logo.jpeg?raw=true" type="image/x-icon">
     <style>
-        #carta-arqueo {
+        body {
             font-family: Arial, sans-serif;
-            width: 210mm; /* Ancho de la hoja carta */
-            margin: 10mm auto; /* Margen para centrar e impresión */
-            box-shadow: 0 0 5mm rgba(0, 0, 0, 0.1); /* Sutil sombra para destacar */
+            margin: 10mm auto; /* Centrar en la página */
             padding: 15mm;
+            box-sizing: border-box; /* Asegura que padding no afecte el ancho total */
         }
 
-        #carta-arqueo h2 {
-            font-size: 18px;
+        #arqueo-flexible {
+            width: 100%; /* Ancho adaptable al contenedor body */
+            max-width: 800px; /* Ancho máximo para evitar que se extienda demasiado */
+            box-shadow: 0 0 5mm rgba(0, 0, 0, 0.1);
+        }
+
+        #arqueo-flexible h2 {
+            font-size: 1.2em; /* Tamaño relativo */
             line-height: 1.2;
             text-align: center;
-            margin-top: 5px;
-            margin-bottom: 5px;
+            margin-top: 0.3em;
+            margin-bottom: 0.3em;
         }
 
-        #carta-arqueo .label {
+        #arqueo-flexible .label {
             text-align: center;
-            font-size: 20px;
+            font-size: 1.5em; /* Tamaño relativo */
             line-height: 1.5;
-            margin-bottom: 10px;
+            margin-bottom: 0.5em;
         }
 
-        #carta-arqueo .informasi {
+        #arqueo-flexible .informasi {
             vertical-align: top;
             text-align: left;
             word-wrap: break-word;
-            font-size: 14px;
+            font-size: 0.9em; /* Tamaño relativo */
         }
 
-        #carta-arqueo .listitem {
-            font-size: 14px;
+        #arqueo-flexible .listitem {
+            font-size: 0.9em; /* Tamaño relativo */
             line-height: 1.2;
         }
 
-        #carta-arqueo table {
+        #arqueo-flexible table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
-            margin-bottom: 8px;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
         }
 
-        #carta-arqueo th, #carta-arqueo td {
-            padding: 5px;
+        #arqueo-flexible th, #arqueo-flexible td {
+            padding: 0.3em;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            font-size: 0.9em; /* Tamaño relativo */
         }
 
-        #carta-arqueo th {
+        #arqueo-flexible th {
             font-weight: bold;
         }
 
-        #carta-arqueo .descriptions {
+        #arqueo-flexible .descriptions {
             width: 100%;
             text-align: left;
             font-weight: bold;
-            padding-top: 3px;
-            padding-bottom: 3px;
+            padding-top: 0.2em;
+            padding-bottom: 0.2em;
+            font-size: 0.9em; /* Tamaño relativo */
         }
 
-        #carta-arqueo .qty {
+        #arqueo-flexible .qty {
             width: 20%;
             text-align: left;
         }
 
-        #carta-arqueo .Amount {
+        #arqueo-flexible .Amount {
             width: 80%;
             text-align: right;
         }
 
-        #carta-arqueo .detail {
+        #arqueo-flexible .detail {
             text-align: left;
             font-weight: bold;
+            font-size: 0.9em; /* Tamaño relativo */
         }
 
-        #carta-arqueo .detail1 {
+        #arqueo-flexible .detail1 {
             text-align: right;
             font-weight: bold;
+            font-size: 0.9em; /* Tamaño relativo */
         }
 
-        #carta-arqueo .bawah {
-            margin-top: 15px;
+        #arqueo-flexible .bawah {
+            margin-top: 1em;
             text-align: center;
+            font-size: 0.9em; /* Tamaño relativo */
         }
 
-        #carta-arqueo .mi-imagen {
-            width: 100px;
-            height: 100px;
+        #arqueo-flexible .mi-imagen {
+            max-width: 150px; /* Ancho máximo relativo al contenedor */
+            height: auto; /* Altura automática para mantener la proporción */
             display: block;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 0.5em auto;
         }
 
-        #carta-arqueo .separador {
+        #arqueo-flexible .separador {
             border-top: 1px dashed #bbb;
-            margin: 10px 0;
+            margin: 0.5em 0;
         }
 
-        /* Alineación específica para la tabla de productos */
-        #carta-arqueo #productTable .listitem td:first-child {
-            width: 80%;
+        /* Ajuste para la tabla de productos */
+        #arqueo-flexible #productTable .listitem td:first-child {
+            width: 70%; /* Porcentaje del ancho disponible */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        #carta-arqueo #productTable .listitem td:last-child {
-            width: 20%;
+        #arqueo-flexible #productTable .listitem td:last-child {
+            width: 30%; /* Porcentaje del ancho disponible */
             text-align: right;
         }
     </style>
 </head>
 <body id="all">
-    <div id="carta-arqueo">
+    <div id="arqueo-flexible">
         <div class="label">
             <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Mi imagen" class="mi-imagen" /><br />
             <span id="empresa"></span><br /><br />
