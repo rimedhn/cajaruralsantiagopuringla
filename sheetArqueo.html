@@ -129,9 +129,10 @@
 <body id="all">
     <div id="arqueo-flexible">
         <div class="label">
-            <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Mi imagen" class="mi-imagen" /><br />
-            <span id="empresa"></span><br /><br />
-            <span>ARQUEO DE CAJA</span><br />
+            <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Mi imagen" class="mi-imagen" />
+            <b><span id="empresa"></span></b>b><br />
+            <span id="sucursal"></span><br /><br />
+            <b><span>ARQUEO DE CAJA</span></b>b><br />
         </div>
 
         <div class="separador"></div>
@@ -205,6 +206,7 @@
 
         // Populate the receipt with data from URL parameters
         setTextContent("empresa", getUrlParameter("empresa"));
+        setTextContent("sucursal", getUrlParameter("sucursal"));
         setTextContent("fecha", getUrlParameter("fecha"));
         setTextContent("caja", getUrlParameter("caja"));
         setTextContent("cajero", getUrlParameter("cajero"));
