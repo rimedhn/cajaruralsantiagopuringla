@@ -131,6 +131,7 @@
         <div class="label">
             <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Mi imagen" class="mi-imagen" /><br />
             <span id="empresa"></span><br /><br />
+            <span id="sucursal"></span><br /><br />
             <span>CUADRE DE CAJA</span><br />
         </div>
 
@@ -150,10 +151,6 @@
             <tr>
                 <td class="informasi" style="width: 30%;">CAJERO:</td>
                 <td class="informasi" style="width: 70%;" id="cajero"></td>
-            </tr>
-            <tr>
-                <td class="informasi" style="width: 30%;">TIPO:</td>
-                <td class="informasi" style="width: 70%;">CUADRE DE CAJA</td>
             </tr>
         </table>
 
@@ -194,34 +191,29 @@
 
         <div class="separador"></div>
         <table>
-            <tr>
-                <td class="detail">TOTAL ARQUEO</td>
-                <td class="detail1">L<span id="totalarqueo"></span></td>
-            </tr>
-          
-                <tr class="listitem">
-                    <th style="text-align: right;" colspan:3>EFECTIVO INICIAL</th>
-                    <th style="text-align: right;"  colspan:1> id="efectivoInicial"</th>
+                <tr>
+                    <td class="detail" style="text-align: right;">EFECTIVO INICIAL</td>
+                    <td class="detail1" style="text-align: right;">L<span id="efectivoInicial"></span></td>
                 </tr>
                 <tr class="listitem">
                     <th style="text-align: right;" colspan:3>TOTAL INGRESOS</th>
-                    <th style="text-align: right;"  colspan:1> id="ingresosTotales"</th>
+                    <th style="text-align: right;">L<span id="ingresosTotales"></span></th>
                 </tr>
                 <tr class="listitem">
-                    <th style="text-align: right;" colspan:3>TOTAL EGRESOS</th>
-                    <th style="text-align: right;"  colspan:1> id="egresosTotales"</th>
+                    <th style="text-align: right;">TOTAL EGRESOS</th>
+                    <th style="text-align: right;">L<span id="egresosTotales"></span></th>
                 </tr>
                 <tr class="listitem">
-                    <th style="text-align: right;" colspan:3>SALDO CAJA</th>
-                    <th style="text-align: right;"  colspan:1> id="saldoCaja"</th>
+                    <th style="text-align: right;">SALDO CAJA</th>
+                    <th style="text-align: right;">L<span id="saldoCaja"></span></th>
                 </tr>
                 <tr class="listitem">
-                    <th style="text-align: right;" colspan:3>EFECTIVO EN CAJA</th>
-                    <th style="text-align: right;"  colspan:1> id="efectivoEnCaja"</th>
+                    <th style="text-align: right;">EFECTIVO EN CAJA</th>
+                    <th style="text-align: right;">L<span id="efectivoEnCaja"></span></th>
                 </tr>
                 <tr class="listitem">
-                    <th style="text-align: right;" colspan:3>DIFERENCIA</th>
-                    <th style="text-align: right;"  colspan:1> id="diferencia"</th>
+                    <th style="text-align: right;">DIFERENCIA</th>
+                    <th style="text-align: right;">L<span id="diferencia"></span></th>
                 </tr>
         </table>
 
@@ -250,15 +242,15 @@
 
         // Populate the receipt with data from URL parameters
         setTextContent("empresa", getUrlParameter("empresa"));
+        setTextContent("sucursal", getUrlParameter("sucursal"));
         setTextContent("fecha", getUrlParameter("fecha"));
         setTextContent("caja", getUrlParameter("caja"));
         setTextContent("cajero", getUrlParameter("cajero"));
-        setTextContent("tipoarqueo", getUrlParameter("tipoarqueo"));
         setTextContent("folio", getUrlParameter("folio"));
-        setTextContent("totalarqueo", getUrlParameter("totalarqueo"));
         setTextContent("depositosCuentas", getUrlParameter("depositosCuentas"));
         setTextContent("retirosCuentas", getUrlParameter("retirosCuentas"));
         setTextContent("saldoDepositosRetiros", getUrlParameter("saldoDepositosRetiros"));
+        setTextContent("efectivoInicial", getUrlParameter("efectivoInicial"));
         setTextContent("ingresosCaja", getUrlParameter("ingresosCaja"));
         setTextContent("egresosCaja", getUrlParameter("egresosCaja"));
         setTextContent("saldoIngresosEgresosCaja", getUrlParameter("saldoIngresosEgresosCaja"));
