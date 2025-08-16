@@ -14,7 +14,6 @@
         }
 
         .print-area {
-            /* Eliminamos el ancho fijo para ajustar manualmente el espaciado */
             height: 23cm;
             margin-left: 0.5cm;
             position: relative;
@@ -23,7 +22,6 @@
         .print-line {
             position: absolute;
             left: 0;
-            /* Eliminamos el ancho fijo. La línea se adaptará al contenido */
             white-space: nowrap;
             overflow: hidden;
         }
@@ -59,10 +57,10 @@
 
                 if (i === lineaImpresion) {
                     const formattedLine = formatTransaction(no, fecha, deposito, retiro, interes, saldo);
-                    // Usamos innerHTML para renderizar los caracteres &nbsp;
-                    lineDiv.innerHTML = formattedLine;
+                    // Usamos innerHTML para procesar el HTML y mostrar los espacios correctamente
+                    lineDiv.innerHTML = formattedLine.replace(/ /g, '&nbsp;');
                 } else {
-                    // Usamos innerHTML para las líneas vacías también
+                    // También usamos innerHTML para las líneas vacías
                     lineDiv.innerHTML = "&nbsp;".repeat(100);
                 }
                 printArea.appendChild(lineDiv);
@@ -71,14 +69,13 @@
         }
 
         function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
-            const space = "&nbsp;";
-
-            const formattedNo = no.padEnd(6, space);
-            const formattedFecha = fecha.padEnd(15, space);
-            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
-            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
-            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(15, space) : "".padStart(15, space);
-            const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
+            // Se usa el espacio normal para que los métodos padEnd y padStart funcionen bien
+            const formattedNo = no.padEnd(6, ' ');
+            const formattedFecha = fecha.padEnd(15, ' ');
+            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
+            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
+            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(15, ' ') : "".padStart(15, ' ');
+            const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
 
             return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
         }
