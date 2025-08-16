@@ -69,7 +69,7 @@
             window.print();
         }
         function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
-    const formattedNo = no.padEnd(6, ' '); 
+    const formattedNo = no.padEnd(10, ' '); 
     const formattedFecha = fecha.padEnd(15, ' ');
     const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
     const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
