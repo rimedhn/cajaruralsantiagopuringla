@@ -14,7 +14,7 @@
         }
 
         .print-area {
-            width: 14cm; /* Ancho del área de impresión */
+            width: 12cm; /* Ancho del área de impresión */
             height: 23cm; /* Largo del área de impresión */
             margin-left: 0.5cm;
             position: relative; /* Para posicionar las líneas */
@@ -84,11 +84,11 @@
             //    }
             //};
 
-            const formattedNo = no.padEnd(8, ' ');
-             const formattedFecha = fecha.padEnd(14, ' ');
-            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(14, ' ') : "".padStart(14, ' ');
-            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(14, ' ') : "".padStart(14, ' ');
-            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(10, ' ') : "".padStart(10, ' ');
+            const formattedNo = no.padEnd(5, ' ');
+             const formattedFecha = fecha.padEnd(10, ' ');
+            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(12, ' ') : "".padStart(12, ' ');
+            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(12, ' ') : "".padStart(12, ' ');
+            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(8, ' ') : "".padStart(8, ' ');
             const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(15, ' ') : "".padStart(15, ' ');
 
             return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
