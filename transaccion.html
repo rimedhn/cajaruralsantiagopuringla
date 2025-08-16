@@ -10,7 +10,7 @@
             font-size: 12px; /* Tamaño de fuente pequeño */
             line-height: 1; /* Interlineado simple */
             margin: 0; /* Sin márgenes */
-            padding-top: 5cm; /* Espacio superior hasta el área de impresión */
+            padding-top: 5.5cm; /* Espacio superior hasta el área de impresión */
         }
 
         .print-area {
@@ -85,7 +85,7 @@
             //    }
             //};
 
-            const formattedNo = no.padEnd(4, ' ');
+            const formattedNo = no.padEnd(6, ' ');
              const formattedFecha = fecha.padEnd(12, ' ');
             const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(10, ' ') : "".padStart(10, ' ');
             const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(10, ' ') : "".padStart(10, ' ');
