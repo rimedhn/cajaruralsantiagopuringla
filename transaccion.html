@@ -69,12 +69,15 @@
             window.print();
         }
         function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
-    const formattedNo = no.padEnd(10, ' '); 
-    const formattedFecha = fecha.padEnd(15, ' ');
-    const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
-    const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
-    const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(15, ' ') : "".padStart(15, ' ');
-    const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(20, ' ') : "".padStart(20, ' ');
+    const space = "&nbsp;";
+    
+    // Remplazamos los espacios normales por &nbsp;
+    const formattedNo = no.padEnd(6, space);
+    const formattedFecha = fecha.padEnd(15, space);
+    const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
+    const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
+    const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(15, space) : "".padStart(15, space);
+    const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
 
     return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
 }
