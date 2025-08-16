@@ -7,25 +7,25 @@
     <style>
         body {
             font-family: monospace;
-            font-size: 12px; 
+            font-size: 12px;
             line-height: 1;
             margin: 0;
-            padding-top: 4.5cm; 
+            padding-top: 4.5cm;
         }
 
         .print-area {
-            /* Eliminamos el ancho fijo. El contenido dictará el ancho */
+            /* Eliminamos el ancho fijo para ajustar manualmente el espaciado */
             height: 23cm;
-            margin-left: 0.5cm; /* Mantenemos este margen para el ajuste manual */
-            position: relative; 
+            margin-left: 0.5cm;
+            position: relative;
         }
 
         .print-line {
             position: absolute;
             left: 0;
             /* Eliminamos el ancho fijo. La línea se adaptará al contenido */
-            white-space: nowrap; 
-            overflow: hidden; 
+            white-space: nowrap;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -49,8 +49,8 @@
             const lineaImpresion = parseInt(getQueryParam("linea")) || 1;
 
             const printArea = document.getElementById("printArea");
-            const lineHeightCm = 23 / 43; 
-            const lineHeightPx = lineHeightCm * 37.795; 
+            const lineHeightCm = 23 / 43;
+            const lineHeightPx = lineHeightCm * 37.795;
 
             for (let i = 1; i <= 43; i++) {
                 const lineDiv = document.createElement("div");
@@ -59,28 +59,29 @@
 
                 if (i === lineaImpresion) {
                     const formattedLine = formatTransaction(no, fecha, deposito, retiro, interes, saldo);
-                    lineDiv.textContent = formattedLine;
+                    // Usamos innerHTML para renderizar los caracteres &nbsp;
+                    lineDiv.innerHTML = formattedLine;
                 } else {
-                    lineDiv.textContent = " ".repeat(100); 
+                    // Usamos innerHTML para las líneas vacías también
+                    lineDiv.innerHTML = "&nbsp;".repeat(100);
                 }
                 printArea.appendChild(lineDiv);
             }
-
             window.print();
         }
-        function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
-    const space = "&nbsp;";
-    
-    // Remplazamos los espacios normales por &nbsp;
-    const formattedNo = no.padEnd(6, space);
-    const formattedFecha = fecha.padEnd(15, space);
-    const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
-    const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
-    const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(15, space) : "".padStart(15, space);
-    const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
 
-    return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
-}
+        function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
+            const space = "&nbsp;";
+
+            const formattedNo = no.padEnd(6, space);
+            const formattedFecha = fecha.padEnd(15, space);
+            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
+            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
+            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(15, space) : "".padStart(15, space);
+            const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(20, space) : "".padStart(20, space);
+
+            return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
+        }
     </script>
 </body>
 </html>
