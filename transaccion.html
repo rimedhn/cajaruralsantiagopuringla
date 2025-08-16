@@ -70,11 +70,11 @@
 
         function formatTransaction(no, fecha, deposito, retiro, interes, saldo) {
             // Se usa el espacio normal para que los métodos padEnd y padStart funcionen bien
-            const formattedNo = no.padEnd(7, ' ');
+            const formattedNo = no.padEnd(6, ' ');
             const formattedFecha = fecha.padEnd(12, ' ');
-            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(15, ' ') : "".padStart(15, ' ');
-            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(15, ' ') : "".padStart(15, ' ');
-            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(15, ' ') : "".padStart(15, ' ');
+            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(14, ' ') : "".padStart(14, ' ');
+            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(13, ' ') : "".padStart(13, ' ');
+            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(12, ' ') : "".padStart(12, ' ');
             const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(15, ' ') : "".padStart(15, ' ');
 
             return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
