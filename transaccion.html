@@ -72,10 +72,10 @@
             // Se usa el espacio normal para que los métodos padEnd y padStart funcionen bien
             const formattedNo = no.padEnd(5, ' ');
             const formattedFecha = fecha.padEnd(12, ' ');
-            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(7, ' ') : "".padStart(7, ' ');
-            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(7, ' ') : "".padStart(7, ' ');
-            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(5, ' ') : "".padStart(5, ' ');
-            const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(7, ' ') : "".padStart(7, ' ');
+            const formattedDeposito = deposito ? `L${parseFloat(deposito).toFixed(2)}`.padStart(12, ' ') : "".padStart(12, ' ');
+            const formattedRetiro = retiro ? `L${parseFloat(retiro).toFixed(2)}`.padStart(12, ' ') : "".padStart(12, ' ');
+            const formattedInteres = interes ? `L${parseFloat(interes).toFixed(2)}`.padStart(12, ' ') : "".padStart(12, ' ');
+            const formattedSaldo = saldo ? `L${parseFloat(saldo).toFixed(2)}`.padStart(12, ' ') : "".padStart(12, ' ');
 
             return `${formattedNo}${formattedFecha}${formattedDeposito}${formattedRetiro}${formattedInteres}${formattedSaldo}`;
         }
