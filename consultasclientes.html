@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Transacciones - Clientes</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- jsPDF CDN for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- SheetJS CDN for Excel export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header class="main-header">
+    <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Logo Institución" class="logo">
+    <h1>Caja Rural Para el Desarrollo de Santiago Puringla</h1>
+  </header>
+  <div class="container">
+    <form id="consultaForm">
+      <label for="cliente">Ingrese el codigo de Cliente:</label>
+      <input type="text" id="cliente" name="cliente" required>
+      <button type="submit">Consultar</button>
+    </form>
+    <div class="export-buttons">
+      <button id="btn-pdf">Exportar PDF</button>
+      <button id="btn-excel">Exportar Excel</button>
+    </div>
+    <div id="resultados"></div>
+    <div id="paginacion"></div>
+  </div>
+  <footer class="main-footer">
+    <p>&copy; 2025 Caja Rural Para el Desarrollo de Santiago Puringla. Todos los derechos reservados.</p>
+  </footer>
+  <!-- WhatsApp floating button -->
+  <a href="https://wa.me/521234567890?text=Hola%20Mi%20Banco%20Ahorro%20Seguro" target="_blank" class="whatsapp-float">
+    <img src="whatsapp.png" alt="WhatsApp">
+  </a>
+  <script src="app.js"></script>
+</body>
+</html>
