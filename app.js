@@ -7,9 +7,8 @@ const NEGOCIO = {
   email: "puringlense@gmail.com"
 };
 
-// Encabezados para mostrar en la tabla
+// Encabezados para mostrar en la tabla (Transacción al final)
 const CAMPOS_TABLA = [
-  { campo: 'idTransacción', label: 'Transacción' },
   { campo: 'FechaHora', label: 'Fecha' },
   { campo: 'Tipo', label: 'Tipo' },
   { campo: 'Monto', label: 'Monto' },
@@ -17,7 +16,8 @@ const CAMPOS_TABLA = [
   { campo: 'Saldo', label: 'Saldo' },
   { campo: 'Caja', label: 'Caja' },
   { campo: 'Sucursal', label: 'Sucursal' },
-  { campo: 'Observaciones', label: 'Observaciones' }
+  { campo: 'Observaciones', label: 'Observaciones' },
+  { campo: 'idTransacción', label: 'Transacción' }
 ];
 const CAMPOS_CLIENTE = ['Cliente', 'NombreCliente', 'Cuenta'];
 const MONEDA_CAMPOS = ['Monto', 'Interes', 'Saldo'];
@@ -33,21 +33,17 @@ function formatoMoneda(valor) {
   return 'L ' + num.toLocaleString('es-HN', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
-// Soporta fechas en formatos YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD
 function filtrarPorFechas(data, fechaInicial, fechaFinal) {
   if (!fechaInicial && !fechaFinal) return data;
   return data.filter(row => {
     let fechaRaw = row['FechaHora'] ? row['FechaHora'].trim() : '';
     let fecha = '';
     if (/^\d{2}\/\d{2}\/\d{4}/.test(fechaRaw)) {
-      // DD/MM/YYYY
       let partes = fechaRaw.split(" ")[0].split("/");
       fecha = `${partes[2]}-${partes[1].padStart(2,"0")}-${partes[0].padStart(2,"0")}`;
     } else if (/^\d{4}\/\d{2}\/\d{2}/.test(fechaRaw)) {
-      // YYYY/MM/DD
       fecha = fechaRaw.split(" ")[0].replace(/\//g,"-");
     } else {
-      // YYYY-MM-DD
       fecha = fechaRaw.split(" ")[0];
     }
     if (fechaInicial && fecha < fechaInicial) return false;
@@ -84,12 +80,10 @@ document.getElementById('consultaForm').addEventListener('submit', function(e) {
             filtrados = filtrarPorFechas(filtrados, fechaInicial, fechaFinal);
 
             filtrados.forEach((row, idx) => row._rowNum = idx + 2);
-            // Aquí estaba el error, ¡ya corregido!
             filtrados.sort((a, b) => b._rowNum - a._rowNum);
 
             resultadosFiltrados = filtrados;
 
-            // Muestra los datos generales del cliente si hay resultados
             if (filtrados.length > 0) {
               datosCliente = {};
               CAMPOS_CLIENTE.forEach(campo => datosCliente[campo] = filtrados[0][campo] ?? "");
