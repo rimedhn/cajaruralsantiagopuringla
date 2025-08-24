@@ -14,12 +14,13 @@ const REGISTROS_POR_PAGINA = 10;
 let resultadosFiltrados = [];
 let paginaActual = 1;
 
-// Formatea valores monetarios con símbolo L y dos decimales
+// Formatea valores monetarios con símbolo L, comas de miles y dos decimales
 function formatoMoneda(valor) {
   if (valor === undefined || valor === null || valor === '') return 'L 0.00';
   let num = parseFloat(valor.toString().replace(/[^\d.-]/g, ''));
   if (isNaN(num)) num = 0;
-  return `L ${num.toFixed(2)}`;
+  // Formato con comas de miles y dos decimales
+  return 'L ' + num.toLocaleString('es-HN', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
 document.getElementById('consultaForm').addEventListener('submit', function(e) {
@@ -83,7 +84,7 @@ function mostrarPagina(numPagina) {
         html += `<tr>`;
         CAMPOS.forEach(campo => {
             if (MONEDA_CAMPOS.includes(campo)) {
-                html += `<td class="moneda-td">${formatoMoneda(fila[campo])}</td>`;
+                html += `<td class="moneda-td"><span class="moneda-simbolo">L</span><span class="moneda-num">${formatoMoneda(fila[campo]).slice(2)}</span></td>`;
             } else {
                 html += `<td>${fila[campo] ?? ''}</td>`;
             }
@@ -166,5 +167,4 @@ document.getElementById('btn-excel').addEventListener('click', function () {
     document.head.appendChild(script);
 })();
 
-// Hacer paginación global
 window.mostrarPagina = mostrarPagina;
