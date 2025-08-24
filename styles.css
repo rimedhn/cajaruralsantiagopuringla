@@ -175,3 +175,16 @@ button:hover {
   height: 48px;
   display: block;
 }
+
+.table-financiera th.moneda-th,
+.table-financiera td.moneda-td {
+  text-align: right;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  color: #0a3c68;
+}
+
+.table-financiera td.moneda-td {
+  background: #f7fcff;
+  font-variant-numeric: tabular-nums;
+}
