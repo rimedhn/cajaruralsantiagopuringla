@@ -1,7 +1,14 @@
 // URL CSV PUBLICADO de tu hoja TransaccionesAhorros
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBWbtz-r2EGTQd76o3XNyPZvdQLzugsli0MV5u-TouM5Hx8pzlReiLNByH7OOwq0tGMZkloURfN6Uu/pub?gid=0&single=true&output=csv";
 
-
+// Datos del negocio
+const NEGOCIO = {
+  nombre: "Inversiones y Servicios para el desarrollo de Santiago Puringla",
+  direccion: "Santiago Puringla, La Paz, Bo. El Centro. Honduras.",
+  telefono: "2774-5283",
+  whatsapp: "9762-4974",
+  email: "puringlense@gmail.com"
+};
 // Orden y campos a mostrar
 const CAMPOS = [
   'idTransacción', 'FechaHora', 'Cliente', 'NombreCliente',
@@ -23,9 +30,25 @@ function formatoMoneda(valor) {
   return 'L ' + num.toLocaleString('es-HN', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
+// Filtra por rango de fecha usando el campo FechaHora
+function filtrarPorFechas(data, fechaInicial, fechaFinal) {
+  if (!fechaInicial && !fechaFinal) return data;
+  // Se espera que FechaHora esté en formato "YYYY-MM-DD" o "YYYY-MM-DD HH:mm:ss"
+  return data.filter(row => {
+    if (!row['FechaHora']) return false;
+    const fecha = row['FechaHora'].slice(0,10); // Solo la fecha
+    if (fechaInicial && fecha < fechaInicial) return false;
+    if (fechaFinal && fecha > fechaFinal) return false;
+    return true;
+  });
+}
+
 document.getElementById('consultaForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const cliente = document.getElementById('cliente').value.trim();
+    const fechaInicial = document.getElementById('fecha-inicial').value;
+    const fechaFinal = document.getElementById('fecha-final').value;
+
     if (!cliente) return;
 
     document.getElementById('resultados').innerHTML = `
@@ -42,13 +65,18 @@ document.getElementById('consultaForm').addEventListener('submit', function(e) {
         .then(csv => {
             const data = Papa.parse(csv, { header: true }).data;
 
-            resultadosFiltrados = data.filter(row =>
+            // Filtrar por cliente y Estado Activo
+            let filtrados = data.filter(row =>
                 row['Cliente'] === cliente && row['Estado'] === 'Activo'
             );
 
-            resultadosFiltrados.forEach((row, idx) => row._rowNum = idx + 2);
-            resultadosFiltrados.sort((a, b) => b._rowNum - a._rowNum);
+            // Filtrar por fechas si se seleccionan
+            filtrados = filtrarPorFechas(filtrados, fechaInicial, fechaFinal);
 
+            filtrados.forEach((row, idx) => row._rowNum = idx + 2);
+            filtrados.sort((a, b) => b._rowNum - a._rowNum);
+
+            resultadosFiltrados = filtrados;
             paginaActual = 1;
             mostrarPagina(paginaActual);
 
@@ -66,7 +94,7 @@ function mostrarPagina(numPagina) {
     if (resultadosFiltrados.length === 0) {
         document.getElementById('resultados').innerHTML = `
           <div class="alert alert-danger text-center">
-            No se encontraron transacciones para este cliente con estado "Activo".
+            No se encontraron transacciones para este cliente con estado "Activo" en el rango de fechas seleccionado.
           </div>`;
         document.getElementById('paginacion').innerHTML = '';
         return;
@@ -84,7 +112,8 @@ function mostrarPagina(numPagina) {
         html += `<tr>`;
         CAMPOS.forEach(campo => {
             if (MONEDA_CAMPOS.includes(campo)) {
-                html += `<td class="moneda-td"><span class="moneda-simbolo">L</span><span class="moneda-num">${formatoMoneda(fila[campo]).slice(2)}</span></td>`;
+                let valor = formatoMoneda(fila[campo]);
+                html += `<td class="moneda-td"><span class="moneda-simbolo">L</span><span class="moneda-num">${valor.slice(2)}</span></td>`;
             } else {
                 html += `<td>${fila[campo] ?? ''}</td>`;
             }
@@ -109,8 +138,13 @@ document.getElementById('btn-pdf').addEventListener('click', function () {
     if (resultadosFiltrados.length === 0) return;
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: 'landscape' });
-    doc.setFontSize(16);
-    doc.text('Reporte de Transacciones', 14, 14);
+    doc.setFontSize(14);
+    doc.text(NEGOCIO.nombre, 14, 14);
+    doc.setFontSize(10);
+    doc.text(`Dirección: ${NEGOCIO.direccion}`, 14, 22);
+    doc.text(`Tel: ${NEGOCIO.telefono} | Whatsapp: ${NEGOCIO.whatsapp} | Email: ${NEGOCIO.email}`, 14, 28);
+    doc.setFontSize(13);
+    doc.text('Reporte de Transacciones', 14, 38);
 
     let rows = resultadosFiltrados.map(fila =>
         CAMPOS.map(c =>
@@ -121,7 +155,7 @@ document.getElementById('btn-pdf').addEventListener('click', function () {
     doc.autoTable({
         head: [CAMPOS],
         body: rows,
-        startY: 24,
+        startY: 44,
         styles: { fontSize: 9, halign: 'right' },
         columnStyles: MONEDA_CAMPOS.reduce((acc, campo) => {
             acc[CAMPOS.indexOf(campo)] = { halign: 'right' };
@@ -158,13 +192,5 @@ document.getElementById('btn-excel').addEventListener('click', function () {
     XLSX.utils.book_append_sheet(wb, ws, 'Transacciones');
     XLSX.writeFile(wb, 'transacciones.xlsx');
 });
-
-// jsPDF autoTable CDN loader
-(function loadAutoTable() {
-    if (!window.jspdf || window.jspdf.autoTable) return;
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js';
-    document.head.appendChild(script);
-})();
 
 window.mostrarPagina = mostrarPagina;
