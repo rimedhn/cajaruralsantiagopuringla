@@ -97,11 +97,13 @@ button:hover {
 .table-financiera {
   width: 100%;
   border-collapse: collapse;
+  font-size: 1rem;
 }
 
-.table-financiera th, .table-financiera td {
+.table-financiera th,
+.table-financiera td {
   border: 1px solid #e0e0e0;
-  padding: 8px 12px;
+  padding: 10px 12px;
   text-align: left;
 }
 
@@ -109,6 +111,7 @@ button:hover {
   background: #005cac;
   color: #fff;
   font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 .table-financiera tr:nth-child(even) {
@@ -118,6 +121,39 @@ button:hover {
 .table-financiera tr:hover {
   background: #ddeffd;
   transition: background 0.2s;
+}
+
+/* Moneda: alineación, ancho y formato */
+.table-financiera th.moneda-th,
+.table-financiera td.moneda-td {
+  text-align: right;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+  color: #0a3c68;
+}
+
+.table-financiera td.moneda-td {
+  background: #f7fcff;
+  font-variant-numeric: tabular-nums;
+  min-width: 120px;
+  padding-right: 18px;
+}
+
+.table-financiera td.moneda-td .moneda-simbolo {
+  font-weight: bold;
+  color: #005cac;
+  padding-right: 6px;
+  font-size: 1rem;
+  vertical-align: middle;
+  letter-spacing: 1px;
+  display: inline-block;
+}
+
+.table-financiera td.moneda-td .moneda-num {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 /* Pagination styles */
@@ -133,12 +169,13 @@ button:hover {
   color: #fff;
   border: none;
   border-radius: 4px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   cursor: pointer;
   font-weight: 500;
 }
 
-.pagination button.active, .pagination button:hover {
+.pagination button.active,
+.pagination button:hover {
   background: #005cac;
 }
 
@@ -176,15 +213,21 @@ button:hover {
   display: block;
 }
 
-.table-financiera th.moneda-th,
-.table-financiera td.moneda-td {
-  text-align: right;
-  font-family: "Segoe UI", Arial, sans-serif;
-  font-weight: 600;
-  color: #0a3c68;
+/* Spinner for loading */
+.spinner-border {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  vertical-align: text-bottom;
+  border: 0.25em solid #0089d6;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border 0.75s linear infinite;
+  margin-right: 8px;
 }
 
-.table-financiera td.moneda-td {
-  background: #f7fcff;
-  font-variant-numeric: tabular-nums;
+@keyframes spinner-border {
+  100% {
+    transform: rotate(360deg);
+  }
 }
