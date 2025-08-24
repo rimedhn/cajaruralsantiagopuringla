@@ -4,7 +4,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
 .main-header {
   display: flex;
   align-items: center;
@@ -13,11 +12,9 @@ body {
   padding: 20px 40px;
   box-shadow: 0 2px 10px rgba(0, 92, 172, 0.08);
 }
-
 .logo {
   height: 60px;
 }
-
 .main-header h1 {
   color: #005cac;
   font-size: 2rem;
@@ -25,7 +22,6 @@ body {
   margin: 0;
   letter-spacing: 1.5px;
 }
-
 .container {
   max-width: 900px;
   margin: 40px auto;
@@ -35,119 +31,171 @@ body {
   padding: 32px;
 }
 
-.bienvenida {
-  font-size: 1.09rem;
-  margin-bottom: 18px;
+/* DATOS DEL NEGOCIO */
+.negocio-datos {
+  margin-bottom: 24px;
   background: #eaf6fd;
   border-radius: 10px;
-  padding: 18px 22px 10px 22px;
-  color: #005cac;
+  padding: 14px 22px 10px 22px;
   box-shadow: 0 2px 12px rgba(0, 92, 172, 0.10);
 }
-
-.bienvenida ul {
-  margin: 8px 0 16px 20px;
-  padding: 0;
+.negocio-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.negocio-logo {
+  height: 72px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,92,172,0.09);
+}
+.negocio-nombre {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #005cac;
+}
+.negocio-direccion {
+  font-size: 1rem;
   color: #333;
+  margin-bottom: 3px;
+}
+.negocio-contacto {
+  font-size: 1rem;
+  color: #444;
+}
+.negocio-contacto span { margin-right: 15px; }
+.negocio-contacto a { color: #005cac; text-decoration: none; font-weight: 600; }
+
+/* INSTRUCCIONES */
+.instrucciones {
+  background: #f7fcff;
+  padding: 14px 22px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 6px rgba(0, 92, 172, 0.07);
+}
+.instrucciones h3 {
+  color: #0070c0;
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.instrucciones ol {
+  margin: 0;
+  padding-left: 30px;
+  color: #444;
   font-size: 1rem;
 }
+.instrucciones li {
+  margin-bottom: 7px;
+  line-height: 1.5;
+}
 
-form {
+/* FORMULARIO */
+.consulta-form-section {
+  background: #f0f6fa;
+  border-radius: 8px;
+  padding: 16px 22px 10px 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 6px rgba(0, 92, 172, 0.05);
+}
+#consultaForm {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 22px;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
-
-label {
-  font-weight: 600;
-  color: #333;
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
-
-input[type="text"],
-input[type="date"] {
+#btn-consultar {
+  background: #0089d6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 26px;
+  font-size: 1.12rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.2s;
+}
+#btn-consultar:hover {
+  background: #005cac;
+}
+input[type="text"], input[type="date"] {
   padding: 8px 12px;
   border-radius: 6px;
   border: 1px solid #0089d6;
   font-size: 1rem;
   min-width: 140px;
-  margin-right: 4px;
 }
-
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.6) sepia(1) saturate(5) hue-rotate(180deg);
 }
 
-button {
-  background: #0089d6;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.2s;
+/* DATOS DEL CLIENTE */
+.datos-cliente-section {
+  background: #fffbe6;
+  border: 1px solid #ffe8a3;
+  border-radius: 9px;
+  margin-bottom: 20px;
+  padding: 16px 22px 10px 22px;
+  box-shadow: 0 2px 8px rgba(255, 218, 77, 0.06);
+}
+.datos-cliente-section h3 { color: #be911b; margin-bottom: 8px; }
+#datos-cliente {
+  font-size: 1.09rem;
+  color: #8d6e1a;
+  font-weight: 500;
 }
 
-button:hover {
-  background: #005cac;
-}
-
+/* BOTONES DE EXPORTACIÓN */
 .export-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   margin-bottom: 12px;
 }
-
 .export-buttons button {
   background: #34a853;
   font-size: 0.95rem;
 }
-
 .export-buttons button#btn-excel {
   background: #fbbc05;
   color: #333;
 }
 
-#resultados {
-  margin-top: 16px;
-  overflow-x: auto;
-}
-
+/* TABLA DE TRANSACCIONES */
 .table-financiera {
   width: 100%;
   border-collapse: collapse;
   font-size: 1rem;
+  margin-bottom: 18px;
 }
-
 .table-financiera th,
 .table-financiera td {
   border: 1px solid #e0e0e0;
   padding: 10px 12px;
   text-align: left;
 }
-
 .table-financiera th {
   background: #005cac;
   color: #fff !important;
   font-weight: 700;
   letter-spacing: 0.5px;
 }
-
 .table-financiera tr:nth-child(even) {
   background: #f3f7fa;
 }
-
 .table-financiera tr:hover {
   background: #ddeffd;
   transition: background 0.2s;
 }
-
-/* Moneda: alineación, ancho y formato */
 .table-financiera th.moneda-th,
 .table-financiera td.moneda-td {
   text-align: right;
@@ -155,14 +203,12 @@ button:hover {
   font-weight: 600;
   color: #0a3c68;
 }
-
 .table-financiera td.moneda-td {
   background: #f7fcff;
   font-variant-numeric: tabular-nums;
   min-width: 120px;
   padding-right: 18px;
 }
-
 .table-financiera td.moneda-td .moneda-simbolo {
   font-weight: bold;
   color: #005cac;
@@ -172,7 +218,6 @@ button:hover {
   letter-spacing: 1px;
   display: inline-block;
 }
-
 .table-financiera td.moneda-td .moneda-num {
   font-size: 1rem;
   letter-spacing: 1px;
@@ -187,7 +232,6 @@ button:hover {
   gap: 8px;
   margin-top: 20px;
 }
-
 .pagination button {
   background: #0089d6;
   color: #fff;
@@ -197,7 +241,6 @@ button:hover {
   cursor: pointer;
   font-weight: 500;
 }
-
 .pagination button.active,
 .pagination button:hover {
   background: #005cac;
@@ -231,18 +274,15 @@ button:hover {
   border: none;
   text-decoration: none;
 }
-
 .whatsapp-float:hover {
   transform: scale(1.08);
   background: #128c7e;
 }
-
 .whatsapp-float img {
   width: 32px;
   height: 32px;
   display: block;
 }
-
 .whatsapp-label {
   font-weight: 600;
   color: #fff;
@@ -251,7 +291,6 @@ button:hover {
   padding-left: 6px;
   letter-spacing: 1px;
 }
-
 .spinner-border {
   display: inline-block;
   width: 2rem;
@@ -263,7 +302,6 @@ button:hover {
   animation: spinner-border 0.75s linear infinite;
   margin-right: 8px;
 }
-
 @keyframes spinner-border {
   100% {
     transform: rotate(360deg);
