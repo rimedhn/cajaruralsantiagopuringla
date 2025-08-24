@@ -3,23 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta de Transacciones - Clientes</title>
+  <title>Consulta de Transacciones - Inversiones y Servicios Santiago Puringla</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="Coop_Santiago_Puringla_Logo-removebg-preview.png">
   <!-- jsPDF CDN for PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- jsPDF autotable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
   <!-- SheetJS CDN for Excel export -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  <!-- PapaParse for CSV parsing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <header class="main-header">
-    <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Logo Institución" class="logo">
-    <h1>Caja Rural Para el Desarrollo de Santiago Puringla</h1>
+    <img src="Coop_Santiago_Puringla_Logo-removebg-preview.png" alt="Logo Institución" class="logo">
+    <h1>Inversiones y Servicios para el desarrollo de Santiago Puringla</h1>
   </header>
   <div class="container">
+    <section>
+      <p class="bienvenida">
+        <strong>¡Bienvenido a la consulta de transacciones!</strong><br>
+        En <strong>Inversiones y Servicios para el desarrollo de Santiago Puringla</strong> trabajamos para brindarte transparencia y acceso seguro a tus movimientos financieros.<br>
+        Consulta tus transacciones de ahorro y crédito de forma fácil, rápida y privada.<br>
+        <br>
+        <strong>¿Cómo usar este sitio?</strong>
+        <ul>
+          <li>Ingresa tu <b>ID Cliente</b> en el campo correspondiente.</li>
+          <li>Opcionalmente, selecciona un <b>rango de fechas</b> para filtrar los resultados.</li>
+          <li>Haz clic en <b>Consultar</b> y revisa tu historial.</li>
+          <li>Puedes <b>descargar</b> los resultados como PDF o Excel, según lo necesites.</li>
+          <li>Para atención personalizada, comunícate por <b>WhatsApp</b> usando el botón verde.</li>
+        </ul>
+        <br>
+        <strong>Dirección:</strong> Santiago Puringla, La Paz, Bo. El Centro. Honduras.<br>
+        <strong>Teléfono:</strong> <a href="tel:27745283">2774-5283</a> |
+        <strong>Whatsapp:</strong> <a href="https://wa.me/50497624974" target="_blank">9762-4974</a><br>
+        <strong>Email:</strong> <a href="mailto:puringlense@gmail.com">puringlense@gmail.com</a>
+      </p>
+    </section>
     <form id="consultaForm">
-      <label for="cliente">Ingrese el codigo de Cliente:</label>
+      <label for="cliente">ID Cliente:</label>
       <input type="text" id="cliente" name="cliente" required>
+      <label for="fecha-inicial">Fecha inicial:</label>
+      <input type="date" id="fecha-inicial" name="fecha-inicial">
+      <label for="fecha-final">Fecha final:</label>
+      <input type="date" id="fecha-final" name="fecha-final">
       <button type="submit">Consultar</button>
     </form>
     <div class="export-buttons">
@@ -30,11 +60,16 @@
     <div id="paginacion"></div>
   </div>
   <footer class="main-footer">
-    <p>&copy; 2025 Caja Rural Para el Desarrollo de Santiago Puringla. Todos los derechos reservados.</p>
+    <p>
+      &copy; 2025 Inversiones y Servicios para el desarrollo de Santiago Puringla.<br>
+      Bo. El Centro, Santiago Puringla, La Paz, Honduras.<br>
+      Tel: 2774-5283 | Whatsapp: 9762-4974 | Email: puringlense@gmail.com
+    </p>
   </footer>
-  <!-- WhatsApp floating button -->
-  <a href="https://wa.me/521234567890?text=Hola%20Mi%20Banco%20Ahorro%20Seguro" target="_blank" class="whatsapp-float">
-    <img src="whatsapp.png" alt="WhatsApp">
+  <!-- WhatsApp floating button estilo botón -->
+  <a href="https://wa.me/50497624974?text=Hola%20Inversiones%20y%20Servicios%20Santiago%20Puringla" target="_blank" class="whatsapp-float" title="Escríbenos por WhatsApp">
+    <img src="Coop_Santiago_Puringla_Logo-removebg-preview.png" alt="WhatsApp">
+    <span class="whatsapp-label">9762-4974</span>
   </a>
   <script src="app.js"></script>
 </body>
