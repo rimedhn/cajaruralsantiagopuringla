@@ -1,16 +1,26 @@
 // URL CSV PUBLICADO de tu hoja TransaccionesAhorros
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBWbtz-r2EGTQd76o3XNyPZvdQLzugsli0MV5u-TouM5Hx8pzlReiLNByH7OOwq0tGMZkloURfN6Uu/pub?gid=0&single=true&output=csv";
 
-// Campos a mostrar
+
+// Orden y campos a mostrar
 const CAMPOS = [
   'idTransacción', 'FechaHora', 'Cliente', 'NombreCliente',
-  'Cuenta', 'Monto', 'Tipo', 'Caja', 'Sucursal',
-  'Observaciones', 'Interes', 'Saldo'
+  'Cuenta', 'Tipo', 'Monto', 'Interes', 'Saldo',
+  'Caja', 'Sucursal', 'Observaciones'
 ];
 
+const MONEDA_CAMPOS = ['Monto', 'Interes', 'Saldo'];
 const REGISTROS_POR_PAGINA = 10;
 let resultadosFiltrados = [];
 let paginaActual = 1;
+
+// Formatea valores monetarios con símbolo L y dos decimales
+function formatoMoneda(valor) {
+  if (valor === undefined || valor === null || valor === '') return 'L 0.00';
+  let num = parseFloat(valor.toString().replace(/[^\d.-]/g, ''));
+  if (isNaN(num)) num = 0;
+  return `L ${num.toFixed(2)}`;
+}
 
 document.getElementById('consultaForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -31,12 +41,10 @@ document.getElementById('consultaForm').addEventListener('submit', function(e) {
         .then(csv => {
             const data = Papa.parse(csv, { header: true }).data;
 
-            // Filtrar por cliente y Estado Activo
             resultadosFiltrados = data.filter(row =>
                 row['Cliente'] === cliente && row['Estado'] === 'Activo'
             );
 
-            // Añadir número de fila para orden descendente
             resultadosFiltrados.forEach((row, idx) => row._rowNum = idx + 2);
             resultadosFiltrados.sort((a, b) => b._rowNum - a._rowNum);
 
@@ -63,15 +71,22 @@ function mostrarPagina(numPagina) {
         return;
     }
 
-    // Render tabla
+    // Render tabla estilizada
     let html = `<table class="table-financiera"><thead><tr>`;
-    CAMPOS.forEach(campo => html += `<th>${campo}</th>`);
+    CAMPOS.forEach(campo => {
+        let align = MONEDA_CAMPOS.includes(campo) ? ' class="moneda-th"' : '';
+        html += `<th${align}>${campo}</th>`;
+    });
     html += `</tr></thead><tbody>`;
     const inicio = (numPagina - 1) * REGISTROS_POR_PAGINA;
     resultadosFiltrados.slice(inicio, inicio + REGISTROS_POR_PAGINA).forEach(fila => {
         html += `<tr>`;
         CAMPOS.forEach(campo => {
-            html += `<td>${fila[campo] ?? ''}</td>`;
+            if (MONEDA_CAMPOS.includes(campo)) {
+                html += `<td class="moneda-td">${formatoMoneda(fila[campo])}</td>`;
+            } else {
+                html += `<td>${fila[campo] ?? ''}</td>`;
+            }
         });
         html += `</tr>`;
     });
@@ -96,13 +111,21 @@ document.getElementById('btn-pdf').addEventListener('click', function () {
     doc.setFontSize(16);
     doc.text('Reporte de Transacciones', 14, 14);
 
-    let rows = resultadosFiltrados.map(fila => CAMPOS.map(c => fila[c] ?? ''));
+    let rows = resultadosFiltrados.map(fila =>
+        CAMPOS.map(c =>
+            MONEDA_CAMPOS.includes(c) ? formatoMoneda(fila[c]) : (fila[c] ?? '')
+        )
+    );
+
     doc.autoTable({
         head: [CAMPOS],
         body: rows,
         startY: 24,
-        styles: { fontSize: 9 },
-        margin: { left: 14, right: 14 }
+        styles: { fontSize: 9, halign: 'right' },
+        columnStyles: MONEDA_CAMPOS.reduce((acc, campo) => {
+            acc[CAMPOS.indexOf(campo)] = { halign: 'right' };
+            return acc;
+        }, {})
     });
 
     doc.save('transacciones.pdf');
@@ -113,10 +136,24 @@ document.getElementById('btn-excel').addEventListener('click', function () {
     if (resultadosFiltrados.length === 0) return;
     const ws_data = [
         CAMPOS,
-        ...resultadosFiltrados.map(fila => CAMPOS.map(c => fila[c] ?? ''))
+        ...resultadosFiltrados.map(fila =>
+          CAMPOS.map(campo =>
+            MONEDA_CAMPOS.includes(campo) ? formatoMoneda(fila[campo]) : (fila[campo] ?? '')
+          )
+        )
     ];
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
+
+    // Alinea a la derecha los campos de moneda en Excel
+    MONEDA_CAMPOS.forEach(campo => {
+        const colIdx = CAMPOS.indexOf(campo);
+        for (let i = 1; i <= resultadosFiltrados.length; i++) {
+            const cell = XLSX.utils.encode_cell({ c: colIdx, r: i });
+            if (ws[cell]) ws[cell].s = { alignment: { horizontal: 'right' } };
+        }
+    });
+
     XLSX.utils.book_append_sheet(wb, ws, 'Transacciones');
     XLSX.writeFile(wb, 'transacciones.xlsx');
 });
