@@ -7,9 +7,17 @@ const NEGOCIO = {
   email: "puringlense@gmail.com"
 };
 
+// Encabezados para mostrar en la tabla
 const CAMPOS_TABLA = [
-  'idTransacción', 'FechaHora', 'Tipo', 'Monto', 'Interes', 'Saldo',
-  'Caja', 'Sucursal', 'Observaciones'
+  { campo: 'idTransacción', label: 'Transacción' },
+  { campo: 'FechaHora', label: 'Fecha' },
+  { campo: 'Tipo', label: 'Tipo' },
+  { campo: 'Monto', label: 'Monto' },
+  { campo: 'Interes', label: 'Interés' },
+  { campo: 'Saldo', label: 'Saldo' },
+  { campo: 'Caja', label: 'Caja' },
+  { campo: 'Sucursal', label: 'Sucursal' },
+  { campo: 'Observaciones', label: 'Observaciones' }
 ];
 const CAMPOS_CLIENTE = ['Cliente', 'NombreCliente', 'Cuenta'];
 const MONEDA_CAMPOS = ['Monto', 'Interes', 'Saldo'];
@@ -76,7 +84,7 @@ document.getElementById('consultaForm').addEventListener('submit', function(e) {
             filtrados = filtrarPorFechas(filtrados, fechaInicial, fechaFinal);
 
             filtrados.forEach((row, idx) => row._rowNum = idx + 2);
-            filtrados.sort((a, b) => b._rowNum - a._rowNum);
+            filtrados.sort((a, b) => b._rowNum - a._rowNum;
 
             resultadosFiltrados = filtrados;
 
@@ -118,26 +126,28 @@ function mostrarPagina(numPagina) {
         return;
     }
 
-    let html = `<table class="table-financiera"><thead><tr>`;
-    CAMPOS_TABLA.forEach(campo => {
-        let align = MONEDA_CAMPOS.includes(campo) ? ' class="moneda-th"' : '';
-        html += `<th${align}>${campo}</th>`;
+    let html = `<div style="overflow-x:auto;"><table class="table-financiera"><thead><tr>`;
+    CAMPOS_TABLA.forEach(obj => {
+        let align = MONEDA_CAMPOS.includes(obj.campo) ? ' class="moneda-th"' : '';
+        html += `<th${align}>${obj.label}</th>`;
     });
     html += `</tr></thead><tbody>`;
     const inicio = (numPagina - 1) * REGISTROS_POR_PAGINA;
     resultadosFiltrados.slice(inicio, inicio + REGISTROS_POR_PAGINA).forEach(fila => {
         html += `<tr>`;
-        CAMPOS_TABLA.forEach(campo => {
+        CAMPOS_TABLA.forEach(obj => {
+            let campo = obj.campo;
             if (MONEDA_CAMPOS.includes(campo)) {
                 let valor = formatoMoneda(fila[campo]);
                 html += `<td class="moneda-td"><span class="moneda-simbolo">L</span><span class="moneda-num">${valor.slice(2)}</span></td>`;
             } else {
-                html += `<td>${fila[campo] ?? ''}</td>`;
+                let tdClass = campo === "Observaciones" ? " class='observaciones-col'" : "";
+                html += `<td${tdClass}>${fila[campo] ?? ''}</td>`;
             }
         });
         html += `</tr>`;
     });
-    html += `</tbody></table>`;
+    html += `</tbody></table></div>`;
     document.getElementById('resultados').innerHTML = html;
 
     let pagHtml = `<div class="pagination">`;
@@ -161,7 +171,6 @@ document.getElementById('btn-pdf').addEventListener('click', function () {
     doc.text(`Dirección: ${NEGOCIO.direccion}`, 14, 22);
     doc.text(`Tel: ${NEGOCIO.telefono} | Whatsapp: ${NEGOCIO.whatsapp} | Email: ${NEGOCIO.email}`, 14, 28);
 
-    // Datos del cliente
     if (datosCliente && Object.keys(datosCliente).length > 0) {
       doc.setFontSize(11);
       doc.text(`ID Cliente: ${datosCliente.Cliente}`, 14, 36);
@@ -173,18 +182,20 @@ document.getElementById('btn-pdf').addEventListener('click', function () {
     doc.text('Reporte de Transacciones', 14, 44);
 
     let rows = resultadosFiltrados.map(fila =>
-        CAMPOS_TABLA.map(c =>
-            MONEDA_CAMPOS.includes(c) ? formatoMoneda(fila[c]) : (fila[c] ?? '')
+        CAMPOS_TABLA.map(obj =>
+            MONEDA_CAMPOS.includes(obj.campo) ? formatoMoneda(fila[obj.campo]) : (fila[obj.campo] ?? '')
         )
     );
 
     doc.autoTable({
-        head: [CAMPOS_TABLA],
+        head: [CAMPOS_TABLA.map(obj => obj.label)],
         body: rows,
         startY: 50,
         styles: { fontSize: 9, halign: 'right' },
+        headStyles: { halign: 'center', fontSize: 10 },
         columnStyles: MONEDA_CAMPOS.reduce((acc, campo) => {
-            acc[CAMPOS_TABLA.indexOf(campo)] = { halign: 'right' };
+            let idx = CAMPOS_TABLA.findIndex(obj => obj.campo === campo);
+            acc[idx] = { halign: 'right' };
             return acc;
         }, {})
     });
@@ -196,10 +207,10 @@ document.getElementById('btn-pdf').addEventListener('click', function () {
 document.getElementById('btn-excel').addEventListener('click', function () {
     if (resultadosFiltrados.length === 0) return;
     const ws_data = [
-        CAMPOS_TABLA,
+        CAMPOS_TABLA.map(obj => obj.label),
         ...resultadosFiltrados.map(fila =>
-          CAMPOS_TABLA.map(campo =>
-            MONEDA_CAMPOS.includes(campo) ? formatoMoneda(fila[campo]) : (fila[campo] ?? '')
+          CAMPOS_TABLA.map(obj =>
+            MONEDA_CAMPOS.includes(obj.campo) ? formatoMoneda(fila[obj.campo]) : (fila[obj.campo] ?? '')
           )
         )
     ];
@@ -207,7 +218,7 @@ document.getElementById('btn-excel').addEventListener('click', function () {
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
 
     MONEDA_CAMPOS.forEach(campo => {
-        const colIdx = CAMPOS_TABLA.indexOf(campo);
+        const colIdx = CAMPOS_TABLA.findIndex(obj => obj.campo === campo);
         for (let i = 1; i <= resultadosFiltrados.length; i++) {
             const cell = XLSX.utils.encode_cell({ c: colIdx, r: i });
             if (ws[cell]) ws[cell].s = { alignment: { horizontal: 'right' } };
