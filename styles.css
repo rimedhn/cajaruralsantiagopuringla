@@ -29,6 +29,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 92, 172, 0.12);
   padding: 32px;
+  overflow-x: hidden;
 }
 
 /* DATOS DEL NEGOCIO */
@@ -112,9 +113,8 @@ body {
   flex-direction: column;
   gap: 5px;
 }
-#btn-consultar {
-  background: #0089d6;
-  color: #fff;
+#btn-consultar,
+.export-buttons button {
   border: none;
   border-radius: 6px;
   padding: 10px 26px;
@@ -123,19 +123,35 @@ body {
   cursor: pointer;
   margin-top: 12px;
   transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(0,92,172,0.11);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.06);
+}
+#btn-consultar {
+  background: #0089d6;
+  color: #fff;
 }
 #btn-consultar:hover {
   background: #005cac;
 }
-input[type="text"], input[type="date"] {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #0089d6;
-  font-size: 1rem;
-  min-width: 140px;
+.export-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 12px;
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.6) sepia(1) saturate(5) hue-rotate(180deg);
+.export-buttons button#btn-pdf {
+  background: #34a853;
+  color: #fff;
+}
+.export-buttons button#btn-pdf:hover {
+  background: #218838;
+}
+.export-buttons button#btn-excel {
+  background: #fbbc05;
+  color: #333;
+}
+.export-buttons button#btn-excel:hover {
+  background: #e2a600;
 }
 
 /* DATOS DEL CLIENTE */
@@ -153,25 +169,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #8d6e1a;
   font-weight: 500;
 }
-
-/* BOTONES DE EXPORTACIÓN */
-.export-buttons {
+.datos-row {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.export-buttons button {
-  background: #34a853;
-  font-size: 0.95rem;
-}
-.export-buttons button#btn-excel {
-  background: #fbbc05;
-  color: #333;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-top: 6px;
 }
 
 /* TABLA DE TRANSACCIONES */
+#transacciones-section {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 18px;
+}
 .table-financiera {
+  min-width: 800px;
   width: 100%;
   border-collapse: collapse;
   font-size: 1rem;
@@ -182,6 +194,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border: 1px solid #e0e0e0;
   padding: 10px 12px;
   text-align: left;
+  word-break: break-word;
 }
 .table-financiera th {
   background: #005cac;
@@ -257,20 +270,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   letter-spacing: 1px;
 }
 
-/* WhatsApp floating button - estilo de botón */
+/* WhatsApp floating button - solo icono */
 .whatsapp-float {
   position: fixed;
   bottom: 28px;
   right: 28px;
   z-index: 1000;
   background: #25d366;
-  border-radius: 50px;
+  border-radius: 50%;
   box-shadow: 0 4px 16px rgba(37, 211, 102, 0.2);
-  padding: 0;
+  padding: 12px;
   transition: transform 0.2s;
   display: flex;
   align-items: center;
-  gap: 8px;
   border: none;
   text-decoration: none;
 }
@@ -282,14 +294,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 32px;
   height: 32px;
   display: block;
-}
-.whatsapp-label {
-  font-weight: 600;
-  color: #fff;
-  font-size: 1.1rem;
-  padding-right: 16px;
-  padding-left: 6px;
-  letter-spacing: 1px;
 }
 .spinner-border {
   display: inline-block;
