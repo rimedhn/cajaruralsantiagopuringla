@@ -35,8 +35,26 @@ body {
   padding: 32px;
 }
 
+.bienvenida {
+  font-size: 1.09rem;
+  margin-bottom: 18px;
+  background: #eaf6fd;
+  border-radius: 10px;
+  padding: 18px 22px 10px 22px;
+  color: #005cac;
+  box-shadow: 0 2px 12px rgba(0, 92, 172, 0.10);
+}
+
+.bienvenida ul {
+  margin: 8px 0 16px 20px;
+  padding: 0;
+  color: #333;
+  font-size: 1rem;
+}
+
 form {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 12px;
@@ -48,12 +66,18 @@ label {
   color: #333;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="date"] {
   padding: 8px 12px;
   border-radius: 6px;
   border: 1px solid #0089d6;
   font-size: 1rem;
-  min-width: 180px;
+  min-width: 140px;
+  margin-right: 4px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.6) sepia(1) saturate(5) hue-rotate(180deg);
 }
 
 button {
@@ -109,8 +133,8 @@ button:hover {
 
 .table-financiera th {
   background: #005cac;
-  color: #fff;
-  font-weight: 600;
+  color: #fff !important;
+  font-weight: 700;
   letter-spacing: 0.5px;
 }
 
@@ -190,30 +214,44 @@ button:hover {
   letter-spacing: 1px;
 }
 
-/* WhatsApp floating button */
+/* WhatsApp floating button - estilo de botón */
 .whatsapp-float {
   position: fixed;
   bottom: 28px;
   right: 28px;
   z-index: 1000;
   background: #25d366;
-  border-radius: 50%;
+  border-radius: 50px;
   box-shadow: 0 4px 16px rgba(37, 211, 102, 0.2);
-  padding: 10px;
+  padding: 0;
   transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  text-decoration: none;
 }
 
 .whatsapp-float:hover {
-  transform: scale(1.1);
+  transform: scale(1.08);
+  background: #128c7e;
 }
 
 .whatsapp-float img {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   display: block;
 }
 
-/* Spinner for loading */
+.whatsapp-label {
+  font-weight: 600;
+  color: #fff;
+  font-size: 1.1rem;
+  padding-right: 16px;
+  padding-left: 6px;
+  letter-spacing: 1px;
+}
+
 .spinner-border {
   display: inline-block;
   width: 2rem;
