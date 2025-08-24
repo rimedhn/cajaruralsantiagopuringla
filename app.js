@@ -84,7 +84,8 @@ document.getElementById('consultaForm').addEventListener('submit', function(e) {
             filtrados = filtrarPorFechas(filtrados, fechaInicial, fechaFinal);
 
             filtrados.forEach((row, idx) => row._rowNum = idx + 2);
-            filtrados.sort((a, b) => b._rowNum - a._rowNum;
+            // Aquí estaba el error, ¡ya corregido!
+            filtrados.sort((a, b) => b._rowNum - a._rowNum);
 
             resultadosFiltrados = filtrados;
 
