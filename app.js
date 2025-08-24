@@ -25,16 +25,22 @@ function formatoMoneda(valor) {
   return 'L ' + num.toLocaleString('es-HN', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
+// Soporta fechas en formatos YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD
 function filtrarPorFechas(data, fechaInicial, fechaFinal) {
   if (!fechaInicial && !fechaFinal) return data;
   return data.filter(row => {
-    if (!row['FechaHora']) return false;
-    let fechaRaw = row['FechaHora'].trim();
-    let fecha = fechaRaw.slice(0,10).replace(/\//g, "-");
-    // Acepta formatos YYYY-MM-DD o DD/MM/YYYY
+    let fechaRaw = row['FechaHora'] ? row['FechaHora'].trim() : '';
+    let fecha = '';
     if (/^\d{2}\/\d{2}\/\d{4}/.test(fechaRaw)) {
+      // DD/MM/YYYY
       let partes = fechaRaw.split(" ")[0].split("/");
-      fecha = `${partes[2]}-${partes[1].padStart(2, "0")}-${partes[0].padStart(2, "0")}`;
+      fecha = `${partes[2]}-${partes[1].padStart(2,"0")}-${partes[0].padStart(2,"0")}`;
+    } else if (/^\d{4}\/\d{2}\/\d{2}/.test(fechaRaw)) {
+      // YYYY/MM/DD
+      fecha = fechaRaw.split(" ")[0].replace(/\//g,"-");
+    } else {
+      // YYYY-MM-DD
+      fecha = fechaRaw.split(" ")[0];
     }
     if (fechaInicial && fecha < fechaInicial) return false;
     if (fechaFinal && fecha > fechaFinal) return false;
@@ -66,10 +72,7 @@ document.getElementById('consultaForm').addEventListener('submit', function(e) {
         .then(csv => {
             const data = Papa.parse(csv, { header: true }).data;
 
-            let filtrados = data.filter(row =>
-                row['Cliente'] === cliente && row['Estado'] === 'Activo'
-            );
-
+            let filtrados = data.filter(row => row['Cliente'] === cliente && row['Estado'] === 'Activo');
             filtrados = filtrarPorFechas(filtrados, fechaInicial, fechaFinal);
 
             filtrados.forEach((row, idx) => row._rowNum = idx + 2);
@@ -203,7 +206,6 @@ document.getElementById('btn-excel').addEventListener('click', function () {
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
 
-    // Alinea a la derecha los campos de moneda en Excel
     MONEDA_CAMPOS.forEach(campo => {
         const colIdx = CAMPOS_TABLA.indexOf(campo);
         for (let i = 1; i <= resultadosFiltrados.length; i++) {
