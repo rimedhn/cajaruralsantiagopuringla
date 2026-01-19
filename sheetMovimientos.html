@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movimiento de Caja</title>
+    <link rel="icon" href="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop%20Santiago%20Puringla%20Logo.jpeg?raw=true" type="image/x-icon">
+    <style>
+        @page {
+            size: letter;
+            margin: 1.5cm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        /* Contenedor principal que ocupa media página */
+        .page-container {
+            width: 100%;
+            max-width: 21. 59cm; /* Ancho carta */
+            margin: 0 auto;
+        }
+
+        /* Cada comprobante ocupa la mitad de la página */
+        .comprobante {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+            page-break-after: always;
+        }
+
+        .comprobante:last-child {
+            page-break-after: auto;
+        }
+
+        /* Separador entre original y copia */
+        .separador-copias {
+            border-top: 2px dashed #999;
+            margin: 15px 0;
+        }
+
+        . comprobante h2 {
+            font-size: 1.2em;
+            line-height: 1.2;
+            text-align: center;
+            margin:  0.3em 0;
+        }
+
+        .comprobante . label {
+            text-align:  center;
+            font-size:  1.2em;
+            line-height:  1.5;
+            margin-bottom: 10px;
+        }
+
+        . comprobante .tipo-documento {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .comprobante .mi-imagen {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+
+        .comprobante .separador {
+            border-top: 1px dashed #bbb;
+            margin: 8px 0;
+        }
+
+        .comprobante . seccion-titulo {
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95em;
+            margin:  5px 0;
+        }
+
+        .comprobante table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 5px 0;
+        }
+
+        .comprobante . info-tabla td {
+            padding: 4px 8px;
+            font-size: 0.9em;
+            vertical-align: top;
+        }
+
+        .comprobante .info-tabla td:first-child {
+            width: 30%;
+            font-weight: bold;
+        }
+
+        .comprobante . info-tabla td:last-child {
+            width: 70%;
+        }
+
+        .comprobante . monto-principal {
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .comprobante . monto-principal .label-monto {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .comprobante .monto-principal .valor-monto {
+            font-size: 1.8em;
+            font-weight:  bold;
+            color: #333;
+        }
+
+        .comprobante .concepto-box {
+            border: 1px solid #ddd;
+            padding: 8px;
+            margin: 8px 0;
+            background-color: #fafafa;
+            border-radius: 3px;
+        }
+
+        . comprobante .concepto-box .concepto-titulo {
+            font-weight: bold;
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        . comprobante .concepto-box .concepto-texto {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .comprobante . footer-info {
+            text-align:  center;
+            font-size: 0.85em;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .comprobante . firma-seccion {
+            margin-top: 20px;
+            text-align:  center;
+        }
+
+        .comprobante . firma-linea {
+            border-top: 1px solid #333;
+            width: 200px;
+            margin: 30px auto 5px auto;
+        }
+
+        .comprobante .firma-label {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        /* Estilo para estados */
+        .comprobante . estado-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight:  bold;
+        }
+
+        .comprobante . estado-activo {
+            background-color:  #d4edda;
+            color:  #155724;
+        }
+
+        .comprobante .estado-cancelado {
+            background-color:  #f8d7da;
+            color: #721c24;
+        }
+
+        /* Estilos para tipos de movimiento */
+        .tipo-ingreso {
+            color: #28a745;
+        }
+
+        .tipo-egreso {
+            color: #dc3545;
+        }
+
+        /* Media queries para impresoras de tickets */
+        @media print and (max-width: 80mm) {
+            @page {
+                margin: 5mm;
+            }
+            
+            .comprobante {
+                max-width: 100%;
+                padding: 5px;
+            }
+
+            .comprobante .mi-imagen {
+                max-width: 80px;
+            }
+
+            .comprobante . monto-principal . valor-monto {
+                font-size: 1.4em;
+            }
+        }
+
+        @media print and (max-width:  58mm) {
+            .comprobante . mi-imagen {
+                max-width: 60px;
+            }
+
+            .comprobante . label {
+                font-size: 1em;
+            }
+
+            .comprobante .info-tabla td {
+                font-size: 0.8em;
+                padding: 2px 4px;
+            }
+        }
+
+        @media print and (max-width: 38mm) {
+            .comprobante .mi-imagen {
+                max-width: 40px;
+            }
+
+            .comprobante .label {
+                font-size: 0.9em;
+            }
+
+            .comprobante .info-tabla td {
+                font-size: 0.75em;
+                padding: 2px;
+            }
+
+            .comprobante .monto-principal .valor-monto {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Para pantallas pequeñas */
+        @media screen and (max-width: 600px) {
+            .comprobante {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- ORIGINAL -->
+        <div class="comprobante">
+            <div class="tipo-documento">ORIGINAL</div>
+            
+            <div class="label">
+                <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Logo" class="mi-imagen" />
+                <b><span id="empresa1"></span></b><br />
+                <span id="sucursal1"></span>
+            </div>
+
+            <div class="separador"></div>
+            <div class="seccion-titulo">MOVIMIENTO DE CAJA</div>
+            <div class="separador"></div>
+
+            <table class="info-tabla">
+                <tr>
+                    <td>FOLIO:</td>
+                    <td><b><span id="folio1"></span></b></td>
+                </tr>
+                <tr>
+                    <td>FECHA:</td>
+                    <td><span id="fecha1"></span> - <span id="hora1"></span></td>
+                </tr>
+                <tr>
+                    <td>CAJA:</td>
+                    <td><span id="caja1"></span></td>
+                </tr>
+                <tr>
+                    <td>CAJERO:</td>
+                    <td><span id="cajero1"></span></td>
+                </tr>
+                <tr>
+                    <td>TIPO:</td>
+                    <td><span id="tipo1" class="tipo-movimiento"></span></td>
+                </tr>
+                <tr>
+                    <td>CATEGORÍA:</td>
+                    <td><span id="categoria1"></span></td>
+                </tr>
+                <tr>
+                    <td>ESTADO:</td>
+                    <td><span id="estado1" class="estado-badge"></span></td>
+                </tr>
+            </table>
+
+            <div class="separador"></div>
+
+            <div class="monto-principal">
+                <div class="label-monto">MONTO</div>
+                <div class="valor-monto">L <span id="monto1"></span></div>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="concepto-box">
+                <div class="concepto-titulo">CONCEPTO: </div>
+                <div class="concepto-texto" id="concepto1"></div>
+            </div>
+
+            <div class="concepto-box" id="comentario-box1">
+                <div class="concepto-titulo">COMENTARIO: </div>
+                <div class="concepto-texto" id="comentario1"></div>
+            </div>
+
+            <div class="separador"></div>
+            
+            <table class="info-tabla">
+                <tr>
+                    <td>USUARIO:</td>
+                    <td><span id="usuario1"></span></td>
+                </tr>
+                <tr>
+                    <td>ID: </td>
+                    <td><span id="id1"></span></td>
+                </tr>
+            </table>
+
+            <div class="firma-seccion">
+                <div class="firma-linea"></div>
+                <div class="firma-label">Firma Autorizada</div>
+            </div>
+
+            <div class="footer-info">
+                ¡Gracias por su preferencia! 
+            </div>
+        </div>
+
+        <div class="separador-copias"></div>
+
+        <!-- COPIA -->
+        <div class="comprobante">
+            <div class="tipo-documento">COPIA</div>
+            
+            <div class="label">
+                <img src="https://github.com/rimedhn/cajaruralsantiagopuringla/blob/main/Coop_Santiago_Puringla_Logo-removebg-preview.png?raw=true" alt="Logo" class="mi-imagen" />
+                <b><span id="empresa2"></span></b><br />
+                <span id="sucursal2"></span>
+            </div>
+
+            <div class="separador"></div>
+            <div class="seccion-titulo">MOVIMIENTO DE CAJA</div>
+            <div class="separador"></div>
+
+            <table class="info-tabla">
+                <tr>
+                    <td>FOLIO:</td>
+                    <td><b><span id="folio2"></span></b></td>
+                </tr>
+                <tr>
+                    <td>FECHA:</td>
+                    <td><span id="fecha2"></span> - <span id="hora2"></span></td>
+                </tr>
+                <tr>
+                    <td>CAJA:</td>
+                    <td><span id="caja2"></span></td>
+                </tr>
+                <tr>
+                    <td>CAJERO:</td>
+                    <td><span id="cajero2"></span></td>
+                </tr>
+                <tr>
+                    <td>TIPO:</td>
+                    <td><span id="tipo2" class="tipo-movimiento"></span></td>
+                </tr>
+                <tr>
+                    <td>CATEGORÍA:</td>
+                    <td><span id="categoria2"></span></td>
+                </tr>
+                <tr>
+                    <td>ESTADO:</td>
+                    <td><span id="estado2" class="estado-badge"></span></td>
+                </tr>
+            </table>
+
+            <div class="separador"></div>
+
+            <div class="monto-principal">
+                <div class="label-monto">MONTO</div>
+                <div class="valor-monto">L <span id="monto2"></span></div>
+            </div>
+
+            <div class="separador"></div>
+
+            <div class="concepto-box">
+                <div class="concepto-titulo">CONCEPTO:</div>
+                <div class="concepto-texto" id="concepto2"></div>
+            </div>
+
+            <div class="concepto-box" id="comentario-box2">
+                <div class="concepto-titulo">COMENTARIO:</div>
+                <div class="concepto-texto" id="comentario2"></div>
+            </div>
+
+            <div class="separador"></div>
+            
+            <table class="info-tabla">
+                <tr>
+                    <td>USUARIO:</td>
+                    <td><span id="usuario2"></span></td>
+                </tr>
+                <tr>
+                    <td>ID: </td>
+                    <td><span id="id2"></span></td>
+                </tr>
+            </table>
+
+            <div class="firma-seccion">
+                <div class="firma-linea"></div>
+                <div class="firma-label">Firma Autorizada</div>
+            </div>
+
+            <div class="footer-info">
+                ¡Gracias por su preferencia!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+            var results = regex.exec(location. search);
+            return results === null
+                ? ""
+                : decodeURIComponent(results[1]. replace(/\+/g, " "));
+        }
+
+        // Function to set text content for both original and copy
+        function setDualContent(baseId, value) {
+            document.getElementById(baseId + "1").textContent = value;
+            document.getElementById(baseId + "2").textContent = value;
+        }
+
+        // Get parameters from URL
+        var id = getUrlParameter("id");
+        var folio = getUrlParameter("folio");
+        var tipo = getUrlParameter("tipo");
+        var categoria = getUrlParameter("categoria");
+        var monto = getUrlParameter("monto");
+        var concepto = getUrlParameter("concepto");
+        var comentario = getUrlParameter("comentario");
+        var caja = getUrlParameter("caja");
+        var sucursal = getUrlParameter("sucursal");
+        var cajero = getUrlParameter("cajero");
+        var estado = getUrlParameter("estado");
+        var usuario = getUrlParameter("usuario");
+        var fecha = getUrlParameter("fecha");
+        var fechahora = getUrlParameter("fechahora");
+        var hora = getUrlParameter("hora");
+        var empresa = getUrlParameter("empresa") || "CAJA RURAL SANTIAGO PURINGLA";
+
+        // Populate both original and copy
+        setDualContent("empresa", empresa);
+        setDualContent("sucursal", sucursal);
+        setDualContent("id", id);
+        setDualContent("folio", folio);
+        setDualContent("fecha", fecha);
+        setDualContent("hora", hora);
+        setDualContent("caja", caja);
+        setDualContent("cajero", cajero);
+        setDualContent("tipo", tipo);
+        setDualContent("categoria", categoria);
+        setDualContent("monto", monto);
+        setDualContent("concepto", concepto);
+        setDualContent("comentario", comentario);
+        setDualContent("usuario", usuario);
+        setDualContent("estado", estado);
+
+        // Apply styling based on movement type
+        var tipoElements = document.querySelectorAll(". tipo-movimiento");
+        tipoElements.forEach(function(element) {
+            if (tipo. toLowerCase().includes("ingreso") || tipo.toLowerCase().includes("entrada")) {
+                element.classList. add("tipo-ingreso");
+            } else if (tipo.toLowerCase().includes("egreso") || tipo.toLowerCase().includes("salida")) {
+                element.classList.add("tipo-egreso");
+            }
+        });
+
+        // Apply styling based on state
+        var estadoElements = document.querySelectorAll(". estado-badge");
+        estadoElements.forEach(function(element) {
+            if (estado.toLowerCase() === "activo" || estado.toLowerCase() === "completado") {
+                element.classList.add("estado-activo");
+            } else if (estado. toLowerCase() === "cancelado" || estado.toLowerCase() === "anulado") {
+                element. classList.add("estado-cancelado");
+            }
+        });
+
+        // Hide comment box if empty
+        if (! comentario || comentario.trim() === "") {
+            document.getElementById("comentario-box1").style.display = "none";
+            document.getElementById("comentario-box2").style.display = "none";
+        }
+
+        // Trigger print when the page loads
+        window.onload = function () {
+            window.print();
+        };
+    </script>
+</body>
+</html>
