@@ -782,27 +782,11 @@
             if (item2) item2.style.display = "none";
         }
 
-        // Auto print - múltiples métodos para asegurar compatibilidad
-        if (document.readyState === 'complete') {
-            // Si ya está cargado, imprimir inmediatamente
-            setTimeout(function() {
-                window.print();
-            }, 100);
-        } else {
-            // Si aún está cargando, esperar
-            window.addEventListener('load', function() {
-                setTimeout(function() {
-                    window.print();
-                }, 100);
-            });
-        }
-
-        // Método adicional con DOMContentLoaded
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                window. print();
-            }, 150);
-        });
+                // Trigger print when the page loads
+        window.onload = function () {
+            window.print();
+        };
+        
     </script>
 </body>
 </html>
